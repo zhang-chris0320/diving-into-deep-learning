@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0b1726" />
-  <meta name="description" content="《动手学深度学习（PyTorch 第二版）》第 3-15 章网络结构图谱，按大网络模块浏览。" />
+  <meta name="description" content="《动手学深度学习（PyTorch 第二版）》第 3-15 章纯 PyTorch 网络图谱，结合经典论文重绘结构、数据流与关键创新。" />
   <title>深度网络图谱 · 第 3-15 章</title>
   <style>
     @font-face {
@@ -126,9 +126,36 @@
     .diagram-node .node-sub { fill: #667b91; font: 12.5px "WenKai", "Kaiti SC", serif; text-anchor: middle; }
     .diagram-arrow { fill: none; stroke: var(--accent); stroke-width: 2.2; marker-end: url(#arrow); }
     .diagram-arrow.secondary { stroke: #94a8bd; stroke-dasharray: 5 6; }
+    .lane-title { fill: #60758c; font: 700 13px "WenKai", "Kaiti SC", serif; letter-spacing: .08em; }
     .legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 13px; padding-top: 11px; border-top: 1px solid #dbe4ee; color: var(--muted); font-size: 12px; }
     .legend span { display: inline-flex; align-items: center; gap: 6px; }
     .legend b { display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: var(--c); }
+    .paper-section { margin-top: 26px; padding: clamp(18px, 2.5vw, 28px); border: 1px solid var(--line); border-radius: 22px; background: #fff; }
+    .paper-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 22px; }
+    .paper-kicker { margin: 0 0 4px; color: var(--accent); font-size: 13px; font-weight: 700; letter-spacing: .12em; }
+    .paper-head h3 { max-width: 940px; margin: 0; font-size: clamp(20px, 2.2vw, 29px); line-height: 1.35; }
+    .paper-meta { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
+    .paper-link { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 7px; padding: 9px 13px; color: #fff; border-radius: 11px; background: var(--accent); font-size: 14px; text-decoration: none; }
+    .paper-link:hover { filter: brightness(.94); }
+    .paper-link[hidden] { display: none; }
+    .source-figure { margin: 20px 0 0; padding: 14px; border: 1px solid #d8e3ee; border-radius: 18px; background: #f7fafd; }
+    .source-figure[hidden] { display: none; }
+    .source-figure-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 2px 10px; color: var(--muted); font-size: 13px; }
+    .source-figure-head strong { color: var(--ink); font-size: 15px; }
+    .source-figure a { display: block; overflow: hidden; border: 1px solid #dfe7ef; border-radius: 12px; background: #fff; }
+    .source-figure img { display: block; width: 100%; max-height: 720px; object-fit: contain; background: #fff; }
+    .source-figure figcaption { margin: 10px 2px 0; color: #526a82; font-size: 13px; }
+    .paper-grid { display: grid; grid-template-columns: .82fr 1.1fr 1.45fr; gap: 14px; margin-top: 19px; }
+    .paper-card { min-width: 0; padding: 16px; border: 1px solid #dde7f1; border-radius: 16px; background: linear-gradient(145deg, #fbfdff, #f4f8fc); }
+    .paper-card h4 { display: flex; align-items: center; gap: 8px; margin: 0 0 9px; font-size: 15px; }
+    .paper-card h4::before { content: ""; width: 9px; height: 9px; border-radius: 3px; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 13%, transparent); }
+    .paper-card p { margin: 0; color: #496179; font-size: 14px; }
+    .paper-card ul { margin: 0; padding-left: 1.2em; color: #3f5871; font-size: 14px; }
+    .paper-card li + li { margin-top: 6px; }
+    .shape-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 6px; }
+    .shape-step { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 9px; color: #314b66; border: 1px solid #d4e1ee; border-radius: 10px; background: #fff; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+    .shape-arrow { color: var(--accent); font-weight: 700; }
+    .redraw-note { margin: 15px 0 0; padding-top: 13px; color: var(--muted); border-top: 1px dashed #d9e3ed; font-size: 12px; }
     .module-footer { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
     .module-footer span { padding: 5px 9px; border-radius: 999px; background: #f0f4f9; }
     .empty { padding: 28px; text-align: center; color: var(--muted); }
@@ -139,6 +166,8 @@
       .note-card, .code-entry { grid-column: 2; }
       .note-card { grid-row: 1 / span 2; margin-top: 0; }
       .code-entry { margin-top: 0; }
+      .paper-grid { grid-template-columns: 1fr 1fr; }
+      .paper-card:last-child { grid-column: 1 / -1; }
     }
     @media (max-width: 1000px) {
       .hero { grid-template-columns: 1fr; }
@@ -163,6 +192,9 @@
       .diagram-card { padding: 12px; }
       .diagram-head { align-items: flex-start; flex-direction: column; gap: 2px; }
       .module-button { min-width: 200px; }
+      .paper-head { flex-direction: column; gap: 12px; }
+      .paper-grid { grid-template-columns: 1fr; }
+      .paper-card:last-child { grid-column: auto; }
     }
   </style>
 </head>
@@ -181,8 +213,8 @@
           <p>按章节浏览网络模块。先看图形化的数据流，再看核心模块、输出和对应的纯 PyTorch 代码。</p>
           <div class="stats" aria-label="内容统计">
             <span class="stat"><strong>13</strong> 个章节</span>
-            <span class="stat"><strong>20+</strong> 个大网络</span>
-            <span class="stat"><strong>95</strong> 个代码小节</span>
+            <span class="stat"><strong>20</strong> 个大网络</span>
+            <span class="stat"><strong>14</strong> 篇论文索引</span>
           </div>
         </div>
         <div class="hero-map" aria-label="网络模块关系图">
@@ -221,6 +253,27 @@
               </div>
             </article>
           </div>
+          <section class="paper-section" aria-labelledby="paperTitle">
+            <div class="paper-head">
+              <div>
+                <p class="paper-kicker">论文视角 · 原理对照</p>
+                <h3 id="paperTitle"></h3>
+                <p id="paperMeta" class="paper-meta"></p>
+              </div>
+              <a id="paperLink" class="paper-link" target="_blank" rel="noopener noreferrer">阅读原论文 <span aria-hidden="true">↗</span></a>
+            </div>
+            <figure id="sourceFigure" class="source-figure" hidden>
+              <div class="source-figure-head"><strong>原论文架构图</strong><span id="sourceFigureLabel"></span></div>
+              <a id="sourceFigureLink" target="_blank" rel="noopener noreferrer"><img id="sourceFigureImage" alt="" /></a>
+              <figcaption id="sourceFigureCaption"></figcaption>
+            </figure>
+            <div class="paper-grid">
+              <article class="paper-card"><h4>原文定位</h4><p id="paperFigure"></p></article>
+              <article class="paper-card"><h4>关键创新</h4><ul id="paperInsights"></ul></article>
+              <article class="paper-card"><h4>张量 / 数据流</h4><div id="shapeFlow" class="shape-flow"></div></article>
+            </div>
+            <p class="redraw-note">上方彩色结构图依据论文与本书实现重新绘制，用于中文讲解；“原论文架构图”区域则直接展示论文中的对应图表。尺寸以本书代码或经典配置为准，二者不一致时会在文字中说明。</p>
+          </section>
           <div id="moduleFooter" class="module-footer"></div>
         </section>
       </section>
@@ -251,6 +304,138 @@
       {id:'birnn', chapter:'15', chapterName:'自然语言处理：应用', title:'BiRNN 情感分类器', category:'文本循环网络', icon:'↔', accent:'#7657df', summary:'正向和反向循环网络共同编码句子，再把两端状态拼接后做情感分类。', note:'双向结构让每个位置同时看到左右上下文；最后的拼接是句子级表示的来源。', tags:['BiRNN','双向上下文','分类头'], code:['chapters/chapter_15_nlp_applications/sentiment_analysis_rnn.py'], nodes:[['Token Embedding','输入句子','input'],['Forward / Backward','双向编码','recurrent'],['Concat','首尾状态','concat'],['Linear','情感分类','output']]}
     ];
 
+    const paperDetails = {
+      alexnet: {
+        title:'《ImageNet Classification with Deep Convolutional Neural Networks》· AlexNet',
+        meta:'来源：Krizhevsky、Sutskever、Hinton，NeurIPS 2012',
+        url:'https://proceedings.neurips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html',
+        image:'paper_figures/alexnet-figure-2.png', imageLabel:'原论文 Figure 2', imageCaption:'AlexNet 的双 GPU 网络架构原图，展示 5 个卷积层、池化层和 3 个全连接层。', imageAlt:'AlexNet 原论文 Figure 2 网络架构图',
+        figure:'对照原论文图 2。论文网络由 5 个卷积层与 3 个全连接层组成；本书实现对输入尺寸与通道数做了教学化调整。',
+        insights:['ReLU 缓解饱和激活带来的训练缓慢。','重叠最大池化逐步压缩空间分辨率。','Dropout 主要放在全连接分类头以抑制过拟合。'],
+        flow:['图像 224²','Conv 11×11 / 4','Pool','Conv 5×5','Conv 3×3 ×3','Pool','FC 4096 ×2','1000 类']
+      },
+      vgg: {
+        title:'《Very Deep Convolutional Networks for Large-Scale Image Recognition》· VGG',
+        meta:'来源：Simonyan、Zisserman，ICLR 2015',
+        url:'https://arxiv.org/abs/1409.1556',
+        image:'paper_figures/vgg-table-1.png', imageLabel:'原论文 Table 1', imageCaption:'VGG 的 A–E 配置表；从左到右逐步增加深度，所有配置都使用规则的卷积块。', imageAlt:'VGG 原论文 Table 1 网络配置表',
+        figure:'对照原论文表 1 的 A–E 配置。这里用“卷积块”表达重复结构；本书的 VGG-11 风格实现比 VGG-16 / VGG-19 更轻。',
+        insights:['用连续 3×3 卷积替代大卷积核，保持统一设计语言。','每次池化通常把高宽减半、通道数增加。','深度通过重复模块扩展，便于按配置表组装网络。'],
+        flow:['224²×3','64 通道','112²','128 通道','56²','256 通道','28²','512 通道','7²','分类头']
+      },
+      inception: {
+        title:'《Going Deeper with Convolutions》· GoogLeNet / Inception',
+        meta:'来源：Szegedy 等，CVPR 2015',
+        url:'https://arxiv.org/abs/1409.4842',
+        image:'paper_figures/inception-figure-2.png', imageLabel:'原论文 Figure 2', imageCaption:'Inception 模块原图：左侧是朴素并行分支，右侧加入 1×1 卷积完成降维。', imageAlt:'GoogLeNet 原论文 Figure 2 Inception 模块图',
+        figure:'对照原论文图 2 与图 3。四条并行路径分别处理 1×1、3×3、5×5 与池化特征，并在通道维拼接。',
+        insights:['并行多尺度分支让同一层观察不同大小的感受野。','1×1 卷积先降维，控制 3×3 与 5×5 分支的计算量。','Concat 保留各分支信息，输出通道数等于分支通道数之和。'],
+        flow:['共享输入','1×1','1×1→3×3','1×1→5×5','Pool→1×1','通道拼接','下一阶段']
+      },
+      resnet: {
+        title:'《Deep Residual Learning for Image Recognition》· ResNet',
+        meta:'来源：He、Zhang、Ren、Sun，CVPR 2016',
+        url:'https://arxiv.org/abs/1512.03385',
+        image:'paper_figures/resnet-figure-2.png', imageLabel:'原论文 Figure 2', imageCaption:'残差学习基本块原图：输入 x 沿恒等捷径与主分支 F(x) 在加法节点汇合。', imageAlt:'ResNet 原论文 Figure 2 残差块结构图',
+        figure:'对照原论文图 2 与表 1。主干按 conv2_x 到 conv5_x 分为四个阶段，残差块内部把 F(x) 与捷径 x 相加。',
+        insights:['把目标映射改写为 F(x)+x，让极深网络更容易优化。','尺寸不变时使用恒等捷径，降采样时使用投影或步幅捷径。','BasicBlock 与 Bottleneck 共享残差思想，但卷积组织不同。'],
+        flow:['224²×3','7×7 / 2','56²','conv2_x','conv3_x','conv4_x','conv5_x','全局池化','1000 类']
+      },
+      densenet: {
+        title:'《Densely Connected Convolutional Networks》· DenseNet',
+        meta:'来源：Huang、Liu、van der Maaten、Weinberger，CVPR 2017',
+        url:'https://arxiv.org/abs/1608.06993',
+        image:'paper_figures/densenet-figure-1.png', imageLabel:'原论文 Figure 1', imageCaption:'五层 Dense Block 原图：每一层都接收此前所有层的特征图。', imageAlt:'DenseNet 原论文 Figure 1 密集连接结构图',
+        figure:'对照原论文图 1 与图 2。Dense Block 内第 l 层接收此前所有特征图的拼接，Transition Layer 负责压缩与下采样。',
+        insights:['L 层密集块具有 L(L+1)/2 条前向连接。','旧特征不被相加覆盖，而是沿通道维持续复用。','增长率 k 决定每一层新增多少通道。'],
+        flow:['Stem','Dense Block 1','Transition','Dense Block 2','Transition','Dense Block 3/4','全局池化','分类']
+      },
+      gru: {
+        title:'《Learning Phrase Representations using RNN Encoder–Decoder》· GRU',
+        meta:'来源：Cho 等，EMNLP 2014',
+        url:'https://arxiv.org/abs/1406.1078',
+        figure:'对照论文第 2.3 节的隐藏单元定义。重置门 r 控制旧状态参与候选状态的程度，更新门 z 在旧状态与候选状态之间插值。',
+        insights:['更新门决定保留多少历史记忆。','重置门决定生成候选状态时忽略多少过去信息。','相较 LSTM，GRU 用更少的门和单一隐藏状态完成长程建模。'],
+        flow:['输入 xₜ','重置门 rₜ','更新门 zₜ','候选 h̃ₜ','插值更新','隐藏状态 hₜ']
+      },
+      seq2seq: {
+        title:'《Learning Phrase Representations using RNN Encoder–Decoder》· Seq2Seq / GRU',
+        meta:'来源：Cho 等，EMNLP 2014',
+        url:'https://arxiv.org/abs/1406.1078',
+        figure:'对照论文的 RNN Encoder–Decoder 框架与 GRU 门控定义。编码器把源序列压缩为上下文，解码器按条件概率逐步生成。',
+        insights:['编码器与解码器联合训练端到端条件概率。','固定长度上下文是早期 Seq2Seq 的信息瓶颈。','GRU 的更新门和重置门控制历史状态进入新状态的比例。'],
+        flow:['源词元序列','Encoder RNN','上下文 c','Decoder RNN','目标前缀','下一词概率']
+      },
+      attention: {
+        title:'《Neural Machine Translation by Jointly Learning to Align and Translate》· Attention',
+        meta:'来源：Bahdanau、Cho、Bengio，ICLR 2015',
+        url:'https://arxiv.org/abs/1409.0473',
+        figure:'对照论文编码器—解码器的软对齐机制。每个解码时间步都对全部源位置计算分数，再加权汇总成上下文向量。',
+        insights:['动态上下文取代单个固定长度向量，缓解信息瓶颈。','Softmax 把匹配分数转成可解释的对齐权重。','Query 决定当前要找什么，Key 负责匹配，Value 提供被汇总的信息。'],
+        flow:['Query q','Keys K','相似度分数','Softmax 权重','加权 Values V','上下文向量']
+      },
+      transformer: {
+        title:'《Attention Is All You Need》· Transformer',
+        meta:'来源：Vaswani 等，NeurIPS 2017',
+        url:'https://arxiv.org/abs/1706.03762',
+        image:'paper_figures/transformer-figure-1.png', imageLabel:'原论文 Figure 1', imageCaption:'Transformer 编码器—解码器完整架构原图，包含注意力、前馈网络、残差与归一化。', imageAlt:'Transformer 原论文 Figure 1 编码器解码器架构图',
+        figure:'对照原论文图 1。编码器和解码器均重复 N 层；解码器额外包含掩码自注意力与编码器—解码器注意力。',
+        insights:['完全用注意力与前馈网络取代循环和卷积。','多头机制在不同表示子空间并行建模关系。','残差连接、LayerNorm 与位置编码共同保证深层序列建模。'],
+        flow:['源词元+位置','Encoder ×N','上下文记忆','目标词元+位置','Masked MHA','Cross MHA','FFN','Softmax']
+      },
+      ssd: {
+        title:'《SSD: Single Shot MultiBox Detector》· SSD',
+        meta:'来源：Liu 等，ECCV 2016',
+        url:'https://arxiv.org/abs/1512.02325',
+        image:'paper_figures/ssd-figure-2.png', imageLabel:'原论文 Figure 2', imageCaption:'SSD 与 YOLO 的单阶段检测架构对照原图；SSD 在多级特征图上直接预测。', imageAlt:'SSD 原论文 Figure 2 单阶段检测架构图',
+        figure:'对照原论文图 2。SSD300 从 38×38 到 1×1 的多尺度特征图分别产生类别与边界框预测。',
+        insights:['单阶段完成类别与定位预测，不需要单独的候选区域网络。','每个位置绑定多种比例和尺度的默认框。','高分辨率层偏向小目标，低分辨率层覆盖大目标。'],
+        flow:['300² 图像','38²','19²','10²','5²','3²','1²','类别+偏移','NMS']
+      },
+      fcn: {
+        title:'《Fully Convolutional Networks for Semantic Segmentation》· FCN',
+        meta:'来源：Long、Shelhamer、Darrell，CVPR 2015',
+        url:'https://arxiv.org/abs/1411.4038',
+        image:'paper_figures/fcn-figure-3.png', imageLabel:'原论文 Figure 3', imageCaption:'FCN-32s、16s、8s 的跳跃融合原图，展示深层语义与浅层细节如何逐级合并。', imageAlt:'FCN 原论文 Figure 3 跳跃融合架构图',
+        figure:'对照原论文图 3 与图 4。分类网络被改造成全卷积形式，并通过 FCN-32s、16s、8s 的跳跃融合恢复边界细节。',
+        insights:['把全连接层改写为卷积，从整图分类转向密集像素预测。','深层语义与浅层细节通过 skip fusion 结合。','转置卷积把低分辨率类别图上采样回输入尺寸。'],
+        flow:['图像 H×W','pool3 1/8','pool4 1/16','深层 1/32','类别卷积','跳跃融合','8× 上采样','像素标签']
+      },
+      word2vec: {
+        title:'《Distributed Representations of Words and Phrases and their Compositionality》· Word2Vec',
+        meta:'来源：Mikolov 等，NeurIPS 2013',
+        url:'https://arxiv.org/abs/1310.4546',
+        figure:'重点对照原论文第 2.2–2.3 节：高频词下采样、负采样目标与 Skip-gram 训练。',
+        insights:['Skip-gram 用中心词预测邻近上下文。','负采样把大词表 Softmax 改写为少量二分类目标。','高频词下采样提高训练速度并改善表示质量。'],
+        flow:['中心词 id','中心向量','上下文向量','点积','Sigmoid','正/负样本损失']
+      },
+      bert: {
+        title:'《BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding》· BERT',
+        meta:'来源：Devlin、Chang、Lee、Toutanova，NAACL 2019',
+        url:'https://arxiv.org/abs/1810.04805',
+        image:'paper_figures/bert-figure-1.png', imageLabel:'原论文 Figure 1', imageCaption:'BERT 预训练与微调流程原图；同一编码器通过不同输出层适配下游任务。', imageAlt:'BERT 原论文 Figure 1 预训练与微调架构图',
+        figure:'对照原论文图 1。输入由 Token、Segment、Position 三种嵌入相加，经过多层双向 Transformer Encoder。',
+        insights:['每一层同时利用左右上下文，形成深层双向表示。','[CLS] 聚合句级信息，[SEP] 划分句子或段落。','MLM 预测被遮盖词元，NSP 是原始 BERT 的句间预训练任务。'],
+        flow:['[CLS] 词元 [SEP]','三种嵌入相加','Encoder ×12/24','上下文化表示','MLM','NSP / 下游任务']
+      },
+      textcnn: {
+        title:'《Convolutional Neural Networks for Sentence Classification》· TextCNN',
+        meta:'来源：Yoon Kim，EMNLP 2014',
+        url:'https://arxiv.org/abs/1408.5882',
+        figure:'对照原论文图 1。不同高度的卷积核跨越完整词向量宽度，提取 n-gram 特征；1-max pooling 为每个卷积核保留最强响应。',
+        insights:['多个卷积核宽度捕捉不同长度的局部短语模式。','全局最大池化把变长句子压缩为固定长度向量。','静态与可训练词向量可作为双通道输入。'],
+        flow:['词元序列','Embedding 矩阵','Conv 3/4/5','ReLU','1-max Pool','拼接','Dropout','类别']
+      }
+    };
+
+    const detailedNodes = {
+      lenet:[['图像','1×28×28','input'],['Conv 5×5','6×28×28','conv'],['AvgPool','6×14×14','pool'],['Conv 5×5','16×10×10','conv'],['AvgPool','16×5×5','pool'],['FC 120→84','分类表示','dense'],['Softmax','10 类','output']],
+      alexnet:[['图像','3×224×224','input'],['Conv 11×11/4','96 个通道','conv'],['MaxPool','空间降采样','pool'],['Conv 5×5','256 个通道','conv'],['Conv 3×3 ×3','384→384→256','conv'],['MaxPool','约 6×6','pool'],['FC 4096 ×2','Dropout','dense'],['Softmax','1000 类','output']],
+      vgg:[['图像','3×224×224','input'],['Block 1','64 通道','conv'],['Pool','112×112','pool'],['Block 2','128 通道','conv'],['Pool','56×56','pool'],['Block 3','256 通道','conv'],['Pool','28×28','pool'],['Block 4 / 5','512 通道','conv'],['Pool','7×7','pool'],['FC 分类头','4096→4096','dense'],['Softmax','1000 类','output']],
+      densenet:[['图像','输入','input'],['Stem','7×7 Conv','conv'],['Dense Block 1','层层拼接','concat'],['Transition 1','1×1 + Pool','pool'],['Dense Block 2','特征复用','concat'],['Transition 2','压缩尺寸','pool'],['Dense Block 3 / 4','高层语义','concat'],['全局池化','1×1','pool'],['分类头','类别 logits','output']],
+      bert:[['词元序列','[CLS] ... [SEP]','input'],['Token + Segment','离散标识','dense'],['Position','顺序信息','activation'],['Encoder ×12/24','双向自注意力','attention'],['上下文化表示','每个词元','recurrent'],['MLM / NSP','预训练任务头','output']]
+    };
+
     const moduleList = document.getElementById('moduleList');
     const moduleCount = document.getElementById('moduleCount');
     const detailChapter = document.querySelector('#detailChapter b');
@@ -263,15 +448,26 @@
     const moduleFooter = document.getElementById('moduleFooter');
     const diagramCaption = document.getElementById('diagramCaption');
     const diagram = document.getElementById('diagram');
+    const paperTitle = document.getElementById('paperTitle');
+    const paperMeta = document.getElementById('paperMeta');
+    const paperLink = document.getElementById('paperLink');
+    const paperFigure = document.getElementById('paperFigure');
+    const paperInsights = document.getElementById('paperInsights');
+    const shapeFlow = document.getElementById('shapeFlow');
+    const sourceFigure = document.getElementById('sourceFigure');
+    const sourceFigureLabel = document.getElementById('sourceFigureLabel');
+    const sourceFigureLink = document.getElementById('sourceFigureLink');
+    const sourceFigureImage = document.getElementById('sourceFigureImage');
+    const sourceFigureCaption = document.getElementById('sourceFigureCaption');
     const esc = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
     function visualFor(kind, w) {
       const cx = w / 2;
-      if (kind === 'input') return `<rect class="visual-fill" x="${cx-28}" y="17" width="48" height="48" rx="8"></rect><path class="visual-stroke" d="M ${cx-20} 54 l12-13 9 8 11-17 10 22"></path><circle class="visual-solid" cx="${cx+9}" cy="29" r="4"></circle>`;
+      if (kind === 'input') return `<rect class="visual-fill" x="${cx-30}" y="17" width="60" height="48" rx="8"></rect><path class="visual-stroke" d="M ${cx-22} 55 L ${cx-8} 40 L ${cx+2} 49 L ${cx+10} 39 L ${cx+23} 55"></path><circle class="visual-solid" cx="${cx+17}" cy="28" r="4"></circle>`;
       if (kind === 'conv') return `<rect class="visual-fill" x="${cx-32}" y="25" width="48" height="42" rx="7"></rect><rect class="visual-fill" x="${cx-23}" y="18" width="48" height="42" rx="7"></rect><rect class="visual-fill" x="${cx-14}" y="11" width="48" height="42" rx="7"></rect><path class="visual-stroke" d="M ${cx-5} 20 v24 M ${cx+7} 20 v24 M ${cx+19} 20 v24 M ${cx-5} 28 h36 M ${cx-5} 36 h36"></path>`;
       if (kind === 'pool') return `<path class="visual-fill" d="M ${cx-31} 15 H ${cx+31} L ${cx+15} 50 H ${cx-15} Z"></path><rect class="visual-solid" x="${cx-17}" y="55" width="34" height="11" rx="5"></rect><path class="visual-stroke" d="M ${cx-20} 26 h40 M ${cx-14} 37 h28"></path>`;
       if (kind === 'dense') return `<path class="visual-stroke" d="M ${cx-25} 18 L ${cx+23} 23 M ${cx-25} 18 L ${cx+23} 47 M ${cx-25} 42 L ${cx+23} 23 M ${cx-25} 42 L ${cx+23} 47 M ${cx-25} 62 L ${cx+23} 47"></path><circle class="visual-dot" cx="${cx-25}" cy="18" r="6"></circle><circle class="visual-dot" cx="${cx-25}" cy="42" r="6"></circle><circle class="visual-dot" cx="${cx-25}" cy="62" r="6"></circle><circle class="visual-solid" cx="${cx+23}" cy="23" r="7"></circle><circle class="visual-solid" cx="${cx+23}" cy="47" r="7"></circle>`;
       if (kind === 'activation') return `<path class="visual-stroke" d="M ${cx-31} 60 H ${cx+32} M ${cx-22} 68 V 10 M ${cx-18} 57 H ${cx-2} L ${cx+18} 25 H ${cx+31}"></path><circle class="visual-solid" cx="${cx+18}" cy="25" r="5"></circle>`;
-      if (kind === 'recurrent') return `<rect class="visual-fill" x="${cx-22}" y="25" width="44" height="34" rx="10"></rect><path class="visual-stroke" d="M ${cx+20} 35 C ${cx+44} 22, ${cx+43} 65, ${cx+19} 53 M ${cx+37} 49 l-3 10-9-3"></path><path class="visual-stroke" d="M ${cx-34} 42 H ${cx-24} M ${cx+24} 42 H ${cx+34}"></path>`;
+      if (kind === 'recurrent') return `<rect class="visual-fill" x="${cx-36}" y="24" width="22" height="34" rx="7"></rect><rect class="visual-fill" x="${cx-11}" y="24" width="22" height="34" rx="7"></rect><rect class="visual-fill" x="${cx+14}" y="24" width="22" height="34" rx="7"></rect><circle class="visual-solid" cx="${cx-25}" cy="41" r="4"></circle><circle class="visual-solid" cx="${cx}" cy="41" r="4"></circle><circle class="visual-solid" cx="${cx+25}" cy="41" r="4"></circle><path class="visual-stroke" d="M ${cx-13} 41 H ${cx-12} M ${cx+12} 41 H ${cx+13} M ${cx-6} 65 C ${cx+4} 72, ${cx+18} 68, ${cx+23} 60 M ${cx+17} 64 L ${cx+23} 60 L ${cx+25} 67"></path>`;
       if (kind === 'attention') return `<circle class="visual-dot" cx="${cx-28}" cy="22" r="6"></circle><circle class="visual-dot" cx="${cx-28}" cy="43" r="6"></circle><circle class="visual-dot" cx="${cx-28}" cy="64" r="6"></circle><circle class="visual-solid" cx="${cx+28}" cy="43" r="9"></circle><path class="visual-stroke" d="M ${cx-21} 22 L ${cx+19} 41 M ${cx-21} 43 H ${cx+19} M ${cx-21} 64 L ${cx+19} 45"></path>`;
       if (kind === 'concat') return `<rect class="visual-fill" x="${cx-31}" y="14" width="19" height="52" rx="6"></rect><rect class="visual-fill" x="${cx-7}" y="14" width="19" height="52" rx="6"></rect><rect class="visual-solid" x="${cx+17}" y="14" width="19" height="52" rx="6"></rect><path class="visual-stroke" d="M ${cx-38} 71 H ${cx+39}"></path>`;
       return `<rect class="visual-fill" x="${cx-31}" y="15" width="62" height="48" rx="10"></rect><circle class="visual-solid" cx="${cx-12}" cy="39" r="8"></circle><rect class="visual-solid" x="${cx+2}" y="29" width="20" height="7" rx="3"></rect><rect class="visual-solid" x="${cx+2}" y="43" width="14" height="7" rx="3"></rect>`;
@@ -290,7 +486,7 @@
     function base(width, height, lanes='') { return `<rect class="diagram-bg" x="18" y="18" width="${width-36}" height="${height-36}" rx="30"></rect>${lanes}`; }
 
     function renderSequence(item) {
-      const nodes = item.nodes || [['输入','张量','input'],['网络模块','特征变换','dense'],['输出','结果','output']];
+      const nodes = detailedNodes[item.id] || item.nodes || [['输入','张量','input'],['网络模块','特征变换','dense'],['输出','结果','output']];
       const w = 146, h = 136, gap = 38, start = 48, y = 132;
       const width = Math.max(860, start * 2 + nodes.length * w + (nodes.length - 1) * gap);
       const height = 400;
@@ -303,45 +499,73 @@
       return {markup, width, height};
     }
     function renderResidual() {
-      const width = 1040, height = 450, w = 158, h = 136, y = 224;
-      const xs = [48, 288, 548, 818];
-      let markup = base(width, height, `<path class="diagram-lane" d="M 44 ${y+h/2} H ${width-44} M 126 116 H 704"></path>`);
-      markup += arrow(xs[0]+w+8,y+h/2,xs[1]-8,y+h/2)+arrow(xs[1]+w+8,y+h/2,xs[2]-8,y+h/2)+arrow(xs[2]+w+8,y+h/2,xs[3]-8,y+h/2);
-      markup += `<path class="diagram-arrow secondary" d="M ${xs[0]+w/2} ${y-8} C ${xs[0]+w/2} 102, ${xs[2]+w/2} 102, ${xs[2]+w/2} ${y-8}"></path>`;
-      markup += svgNode(xs[0],y,w,h,['输入','特征图','input'])+svgNode(xs[1],y,w,h,['Conv Block','主分支','conv'])+svgNode(xs[2],y,w,h,['相加节点','残差融合','concat'])+svgNode(xs[3],y,w,h,['输出','更新表示','output']);
-      markup += svgNode(330,48,w,h,['Identity','捷径分支','attention']);
+      const width = 1640, height = 650, w = 146, h = 136, gap = 42, start = 46, topY = 70;
+      const stages = [['图像','3×224×224','input'],['7×7 Conv / 2','64×112×112','conv'],['MaxPool / 2','64×56×56','pool'],['conv2_x','64 通道','conv'],['conv3_x','128 通道','conv'],['conv4_x','256 通道','conv'],['conv5_x','512 通道','conv'],['GAP + FC','1000 类','output']];
+      let markup = base(width,height,`<text class="lane-title" x="46" y="51">论文表 1 · RESNET 主干阶段</text><text class="lane-title" x="46" y="353">残差块内部 · F(x) + x</text>`);
+      stages.forEach((node,i)=>{ const x=start+i*(w+gap); markup+=svgNode(x,topY,w,h,node); if(i<stages.length-1) markup+=arrow(x+w+7,topY+h/2,start+(i+1)*(w+gap)-7,topY+h/2); });
+      const y=414, xs=[280,560,840,1120];
+      markup += svgNode(xs[0],y,w,h,['输入 x','捷径起点','input'])+svgNode(xs[1],y,w,h,['F(x)','2–3 层卷积','conv'])+svgNode(xs[2],y,w,h,['逐元素相加','F(x) + x','concat'])+svgNode(xs[3],y,w,h,['ReLU','块输出','output']);
+      markup += arrow(xs[0]+w+7,y+h/2,xs[1]-7,y+h/2)+arrow(xs[1]+w+7,y+h/2,xs[2]-7,y+h/2)+arrow(xs[2]+w+7,y+h/2,xs[3]-7,y+h/2);
+      markup += `<path class="diagram-arrow secondary" d="M ${xs[0]+w/2} ${y-10} C ${xs[0]+w/2} 365, ${xs[2]+w/2} 365, ${xs[2]+w/2} ${y-10}"></path>`;
       return {markup,width,height};
     }
     function renderBranches() {
-      const width = 1120, height = 540, w = 170, h = 136, inputX = 48, branchX = 300, mergeX = 650, outputX = 900, centerY = 202;
-      const ys = [42,202,362];
+      const width = 1160, height = 660, w = 170, h = 136, inputX = 48, branchX = 300, mergeX = 690, outputX = 940, centerY = 262;
+      const ys = [42,182,322,462];
       let markup = base(width,height,`<path class="diagram-lane" d="M 44 ${centerY+h/2} H ${width-44}"></path>`);
       ys.forEach((y,i)=>{ markup += arrow(inputX+w+8,centerY+h/2,branchX-8,y+h/2)+arrow(branchX+w+8,y+h/2,mergeX-8,centerY+h/2); });
       markup += arrow(mergeX+w+8,centerY+h/2,outputX-8,centerY+h/2);
-      markup += svgNode(inputX,centerY,w,h,['输入','共享特征','input'])+svgNode(branchX,ys[0],w,h,['1×1 Conv','局部映射','conv'])+svgNode(branchX,ys[1],w,h,['3×3 Conv','中等感受野','conv'])+svgNode(branchX,ys[2],w,h,['5×5 / Pool','大尺度信息','pool'])+svgNode(mergeX,centerY,w,h,['Concat','合并通道','concat'])+svgNode(outputX,centerY,w,h,['输出','汇总特征','output']);
+      markup += svgNode(inputX,centerY,w,h,['输入','共享特征','input'])+svgNode(branchX,ys[0],w,h,['1×1 Conv','直接映射','conv'])+svgNode(branchX,ys[1],w,h,['1×1 → 3×3','降维后卷积','conv'])+svgNode(branchX,ys[2],w,h,['1×1 → 5×5','大感受野','conv'])+svgNode(branchX,ys[3],w,h,['3×3 Pool → 1×1','池化分支','pool'])+svgNode(mergeX,centerY,w,h,['Concat','沿通道拼接','concat'])+svgNode(outputX,centerY,w,h,['输出','下一 Inception','output']);
       return {markup,width,height};
     }
     function renderMulti() {
-      const width = 1110, height = 500, w = 170, h = 136, inputX = 48, featureX = 300, headX = 570, outputX = 870, centerY = 182;
-      const ys = [74,290];
-      let markup = base(width,height,`<path class="diagram-lane" d="M 44 ${centerY+h/2} H ${width-44}"></path>`);
-      ys.forEach(y=>{ markup += arrow(inputX+w+8,centerY+h/2,featureX-8,y+h/2)+arrow(featureX+w+8,y+h/2,headX-8,y+h/2)+arrow(headX+w+8,y+h/2,outputX-8,centerY+h/2); });
-      markup += svgNode(inputX,centerY,w,h,['Backbone','共享特征','input'])+svgNode(featureX,ys[0],w,h,['高分辨率特征','小目标','conv'])+svgNode(featureX,ys[1],w,h,['低分辨率特征','大目标','conv'])+svgNode(headX,ys[0],w,h,['Class Head','类别概率','dense'])+svgNode(headX,ys[1],w,h,['Box Head','边界框','dense'])+svgNode(outputX,centerY,w,h,['NMS','筛选候选','output']);
+      const width = 1520, height = 610, w = 132, h = 136, start = 235, gap = 35, topY = 74, lowerY = 360;
+      const scales = [['38×38','小目标细节'],['19×19','中小目标'],['10×10','中等目标'],['5×5','中大目标'],['3×3','大目标'],['1×1','全局目标']];
+      let markup = base(width,height,`<text class="lane-title" x="46" y="54">SSD300 · 六级特征金字塔</text><text class="lane-title" x="235" y="342">每一级都预测 K 个类别分数与 4 个坐标偏移</text>`);
+      markup += svgNode(46,topY,w,h,['输入','300×300','input']);
+      scales.forEach((s,i)=>{ const x=start+i*(w+gap); markup+=svgNode(x,topY,w,h,[s[0],s[1],'conv'])+svgNode(x,lowerY,w,h,['预测头','类别 + 框','dense']); if(i===0) markup+=arrow(46+w+7,topY+h/2,x-7,topY+h/2); else markup+=arrow(start+(i-1)*(w+gap)+w+7,topY+h/2,x-7,topY+h/2); markup+=arrow(x+w/2,topY+h+7,x+w/2,lowerY-7); });
+      const nmsX=1270,nmsY=217;
+      scales.forEach((s,i)=>{ const x=start+i*(w+gap); markup += `<path class="diagram-arrow secondary" d="M ${x+w} ${lowerY+h/2} C 1210 ${lowerY+h/2}, 1210 ${nmsY+h/2}, ${nmsX-8} ${nmsY+h/2}"></path>`; });
+      markup += svgNode(nmsX,nmsY,w,h,['NMS','最终检测框','output']);
+      return {markup,width,height};
+    }
+    function renderDenseNet() {
+      const width=1290,height=610,w=154,h=136;
+      const points=[[48,235], [290,74], [500,235], [710,396], [1010,235]];
+      const nodes=[['输入 x₀','已有特征','input'],['层 1','H₁([x₀])','conv'],['层 2','H₂([x₀,x₁])','conv'],['层 3','H₃([x₀,x₁,x₂])','conv'],['Transition','1×1 + Pool','pool']];
+      let markup=base(width,height,`<text class="lane-title" x="46" y="54">DENSE BLOCK · 前面所有特征都送入后续层</text>`);
+      points.forEach((p,i)=>{ markup+=svgNode(p[0],p[1],w,h,nodes[i]); });
+      [[0,1],[0,2],[0,3],[1,2],[1,3],[2,3],[0,4],[1,4],[2,4],[3,4]].forEach(([a,b])=>{
+        const [ax,ay]=points[a], [bx,by]=points[b];
+        markup+=arrow(ax+w+7,ay+h/2,bx-7,by+h/2,b<4 && b-a>1);
+      });
+      return {markup,width,height};
+    }
+    function renderFCN() {
+      const width=1320,height=650,w=158,h=136, input=[48,252], fusion=[900,252], output=[1130,252];
+      const features=[[300,54,['pool3','1/8 分辨率','conv']], [300,252,['pool4','1/16 分辨率','conv']], [300,450,['深层语义','1/32 分辨率','conv']]];
+      const scores=[[565,54,['Score 3','浅层细节','dense']], [565,252,['Score 4','中层语义','dense']], [565,450,['Score 32','深层类别图','dense']]];
+      let markup=base(width,height,`<text class="lane-title" x="46" y="52">FCN-8s · 三种分辨率的跳跃融合</text>`);
+      markup+=svgNode(...input,w,h,['图像','H×W×3','input'])+svgNode(...fusion,w,h,['逐级相加','2× + 2× 融合','concat'])+svgNode(...output,w,h,['8× 上采样','逐像素类别','output']);
+      features.forEach((p,i)=>{ markup+=svgNode(p[0],p[1],w,h,p[2])+svgNode(scores[i][0],scores[i][1],w,h,scores[i][2]); markup+=arrow(input[0]+w+7,input[1]+h/2,p[0]-7,p[1]+h/2)+arrow(p[0]+w+7,p[1]+h/2,scores[i][0]-7,scores[i][1]+h/2)+arrow(scores[i][0]+w+7,scores[i][1]+h/2,fusion[0]-7,fusion[1]+h/2,i<2); });
+      markup+=arrow(fusion[0]+w+7,fusion[1]+h/2,output[0]-7,output[1]+h/2);
       return {markup,width,height};
     }
     function renderTransformer(item) {
-      if (item.id !== 'bert') {
-        return renderSequence({...item,nodes:[['Token','输入序列','input'],['位置编码','加入顺序','activation'],['多头注意力','连接上下文','attention'],['Encoder × N','提取表示','recurrent'],['Decoder × N','逐步生成','recurrent'],['Softmax','输出词元','output']]});
-      }
-      const width = 1080, height = 500, w = 170, h = 136, inputX = 48, embedX = 280, encoderX = 520, headX = 780, ys = [72,292], centerY = 182;
-      let markup = base(width,height,`<path class="diagram-lane" d="M 44 ${centerY+h/2} H ${width-44}"></path>`);
-      markup += arrow(inputX+w+8,centerY+h/2,embedX-8,centerY+h/2)+arrow(embedX+w+8,centerY+h/2,encoderX-8,centerY+h/2)+arrow(encoderX+w+8,centerY+h/2,headX-8,ys[0]+h/2)+arrow(encoderX+w+8,centerY+h/2,headX-8,ys[1]+h/2);
-      markup += svgNode(inputX,centerY,w,h,['Token / Segment','输入索引','input'])+svgNode(embedX,centerY,w,h,['三种嵌入','加上位置','dense'])+svgNode(encoderX,centerY,w,h,['Encoder × N','双向表示','attention'])+svgNode(headX,ys[0],w,h,['MLM Head','预测遮盖词','dense'])+svgNode(headX,ys[1],w,h,['NSP Head','句间关系','output']);
+      if (item.id === 'bert') return renderSequence(item);
+      const width=1510,height=650,w=148,h=136,gap=38,start=48,encY=76,decY=414;
+      const encoder=[['源词元','输入序列','input'],['嵌入 + 位置','顺序信息','dense'],['Multi-Head','自注意力','attention'],['Add & Norm','残差归一化','concat'],['FFN','逐位置变换','dense'],['Encoder ×N','上下文记忆','output']];
+      const decoder=[['目标词元','右移输入','input'],['嵌入 + 位置','顺序信息','dense'],['Masked MHA','只看过去','attention'],['Cross MHA','读取 Encoder','attention'],['FFN + Norm','解码表示','dense'],['Linear + Softmax','下一词概率','output']];
+      let markup=base(width,height,`<text class="lane-title" x="48" y="56">ENCODER 路径</text><text class="lane-title" x="48" y="394">DECODER 路径</text>`);
+      encoder.forEach((node,i)=>{ const x=start+i*(w+gap); markup+=svgNode(x,encY,w,h,node); if(i<encoder.length-1) markup+=arrow(x+w+7,encY+h/2,start+(i+1)*(w+gap)-7,encY+h/2); });
+      decoder.forEach((node,i)=>{ const x=start+i*(w+gap); markup+=svgNode(x,decY,w,h,node); if(i<decoder.length-1) markup+=arrow(x+w+7,decY+h/2,start+(i+1)*(w+gap)-7,decY+h/2); });
+      const memoryX=start+5*(w+gap), crossX=start+3*(w+gap);
+      markup+=`<path class="diagram-arrow secondary" d="M ${memoryX+w/2} ${encY+h+7} C ${memoryX+w/2} 320, ${crossX+w/2} 320, ${crossX+w/2} ${decY-7}"></path>`;
       return {markup,width,height};
     }
     function renderDiagram(item) {
       diagram.style.setProperty('--accent', item.accent);
-      const result = item.mode === 'residual' ? renderResidual() : item.mode === 'branches' ? renderBranches() : item.mode === 'multi' ? renderMulti() : item.mode === 'transformer' ? renderTransformer(item) : renderSequence(item);
+      const result = item.mode === 'residual' ? renderResidual() : item.mode === 'branches' ? renderBranches() : item.mode === 'multi' ? renderMulti() : item.id === 'densenet' ? renderDenseNet() : item.id === 'fcn' ? renderFCN() : item.mode === 'transformer' ? renderTransformer(item) : renderSequence(item);
       diagram.setAttribute('viewBox', `0 0 ${result.width} ${result.height}`);
       diagram.setAttribute('width', result.width);
       diagram.setAttribute('height', result.height);
@@ -356,6 +580,13 @@
     }
     function selectModule(id) {
       const item = modules.find(m => m.id === id) || modules[0];
+      const paper = paperDetails[item.id] || {
+        title:`${item.title} · 本书纯 PyTorch 实现`,
+        meta:`来源：《动手学深度学习（PyTorch 第二版）》第 ${item.chapter} 章「${item.chapterName}」`,
+        figure:'本模块以教材的数据流和代码结构为主要依据；页面结构图把关键算子、输入输出和训练目标拆开标注。',
+        insights:[item.summary,item.note],
+        flow:(detailedNodes[item.id] || item.nodes || []).map(node => node[0])
+      };
       document.documentElement.style.setProperty('--accent', item.accent);
       detailChapterDot.style.background = item.accent;
       detailChapter.textContent = `第 ${item.chapter} 章 · ${item.chapterName}`;
@@ -363,9 +594,30 @@
       detailTitle.textContent = item.title;
       detailSummary.textContent = item.summary;
       detailNote.textContent = item.note;
-      diagramCaption.textContent = `第 ${item.chapter} 章 · ${item.category}`;
+      diagramCaption.textContent = `${paperDetails[item.id] ? '论文重绘' : '教材结构'} · 第 ${item.chapter} 章`;
       codeLinks.innerHTML = item.code.map(path => `<a class="code-link" href="#" title="源码位于配套代码包：${esc(path)}">${esc(path)}</a>`).join('');
       moduleFooter.innerHTML = item.tags.map(tag => `<span>${esc(tag)}</span>`).join('');
+      paperTitle.textContent = paper.title;
+      paperMeta.textContent = paper.meta;
+      paperFigure.textContent = paper.figure;
+      paperInsights.innerHTML = paper.insights.map(text => `<li>${esc(text)}</li>`).join('');
+      shapeFlow.innerHTML = paper.flow.map((step,index) => `${index ? '<span class="shape-arrow" aria-hidden="true">→</span>' : ''}<span class="shape-step">${esc(step)}</span>`).join('');
+      if (paper.url) { paperLink.href = paper.url; paperLink.hidden = false; }
+      else { paperLink.removeAttribute('href'); paperLink.hidden = true; }
+      if (paper.image) {
+        sourceFigure.hidden = false;
+        sourceFigureLabel.textContent = paper.imageLabel;
+        sourceFigureLink.href = paper.url;
+        sourceFigureImage.src = paper.image;
+        sourceFigureImage.alt = paper.imageAlt;
+        sourceFigureCaption.textContent = `${paper.imageCaption} 图片截取自上述原论文，点击图片可查看论文来源。`;
+      } else {
+        sourceFigure.hidden = true;
+        sourceFigureLink.removeAttribute('href');
+        sourceFigureImage.removeAttribute('src');
+        sourceFigureImage.alt = '';
+        sourceFigureCaption.textContent = '';
+      }
       renderDiagram(item);
       renderModules(item.id);
     }

@@ -30,7 +30,9 @@ python -m http.server 4173
 
 ## 在线网站
 
-<https://deep-network-atlas-pytorch.zhangchris0320.chatgpt.site>
+<https://zhang-chris0320.github.io/diving-into-deep-learning/>
+
+网站通过 GitHub Pages 自动发布，不依赖 `chatgpt.site`。更新 `website/dist/` 后，GitHub Actions 会自动部署最新版本。
 
 ## 说明
 

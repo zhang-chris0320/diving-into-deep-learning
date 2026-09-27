@@ -1,0 +1,10 @@
+torch>=2.0
+torchvision>=0.15
+numpy>=1.23
+pandas>=1.5
+matplotlib>=3.6
+Pillow>=9.0
+scipy>=1.9
+requests>=2.28
+ipython>=8.0
+matplotlib-inline>=0.1

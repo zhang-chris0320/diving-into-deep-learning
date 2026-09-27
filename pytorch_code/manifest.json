@@ -1,0 +1,569 @@
+[
+  {
+    "chapter": "03",
+    "title": "线性神经网络",
+    "source_dir": "chapter_linear-networks",
+    "sections": [
+      {
+        "source": "linear-regression.md",
+        "output": "chapters/chapter_03_linear_networks/linear_regression.py",
+        "blocks": 7
+      },
+      {
+        "source": "linear-regression-scratch.md",
+        "output": "chapters/chapter_03_linear_networks/linear_regression_scratch.py",
+        "blocks": 14
+      },
+      {
+        "source": "linear-regression-concise.md",
+        "output": "chapters/chapter_03_linear_networks/linear_regression_concise.py",
+        "blocks": 11
+      },
+      {
+        "source": "image-classification-dataset.md",
+        "output": "chapters/chapter_03_linear_networks/image_classification_dataset.py",
+        "blocks": 11
+      },
+      {
+        "source": "softmax-regression-scratch.md",
+        "output": "chapters/chapter_03_linear_networks/softmax_regression_scratch.py",
+        "blocks": 20
+      },
+      {
+        "source": "softmax-regression-concise.md",
+        "output": "chapters/chapter_03_linear_networks/softmax_regression_concise.py",
+        "blocks": 6
+      }
+    ]
+  },
+  {
+    "chapter": "04",
+    "title": "多层感知机",
+    "source_dir": "chapter_multilayer-perceptrons",
+    "sections": [
+      {
+        "source": "mlp.md",
+        "output": "chapters/chapter_04_multilayer_perceptrons/mlp.py",
+        "blocks": 7
+      },
+      {
+        "source": "mlp-scratch.md",
+        "output": "chapters/chapter_04_multilayer_perceptrons/mlp_scratch.py",
+        "blocks": 8
+      },
+      {
+        "source": "mlp-concise.md",
+        "output": "chapters/chapter_04_multilayer_perceptrons/mlp_concise.py",
+        "blocks": 4
+      },
+      {
+        "source": "underfit-overfit.md",
+        "output": "chapters/chapter_04_multilayer_perceptrons/underfit_overfit.py",
+        "blocks": 9
+      },
+      {
+        "source": "weight-decay.md",
+        "output": "chapters/chapter_04_multilayer_perceptrons/weight_decay.py",
+        "blocks": 10
+      },
+      {
+        "source": "dropout.md",
+        "output": "chapters/chapter_04_multilayer_perceptrons/dropout.py",
+        "blocks": 7
+      },
+      {
+        "source": "numerical-stability-and-init.md",
+        "output": "chapters/chapter_04_multilayer_perceptrons/numerical_stability_and_init.py",
+        "blocks": 2
+      },
+      {
+        "source": "kaggle-house-price.md",
+        "output": "chapters/chapter_04_multilayer_perceptrons/kaggle_house_price.py",
+        "blocks": 20
+      }
+    ]
+  },
+  {
+    "chapter": "05",
+    "title": "深度学习计算",
+    "source_dir": "chapter_deep-learning-computation",
+    "sections": [
+      {
+        "source": "model-construction.md",
+        "output": "chapters/chapter_05_deep_learning_computation/model_construction.py",
+        "blocks": 8
+      },
+      {
+        "source": "parameters.md",
+        "output": "chapters/chapter_05_deep_learning_computation/parameters.py",
+        "blocks": 15
+      },
+      {
+        "source": "custom-layer.md",
+        "output": "chapters/chapter_05_deep_learning_computation/custom_layer.py",
+        "blocks": 8
+      },
+      {
+        "source": "read-write.md",
+        "output": "chapters/chapter_05_deep_learning_computation/read_write.py",
+        "blocks": 8
+      },
+      {
+        "source": "use-gpu.md",
+        "output": "chapters/chapter_05_deep_learning_computation/use_gpu.py",
+        "blocks": 13
+      },
+      {
+        "source": "deferred-init.md",
+        "output": "chapters/chapter_05_deep_learning_computation/deferred_init.py",
+        "blocks": 1,
+        "manual": true
+      }
+    ]
+  },
+  {
+    "chapter": "06",
+    "title": "卷积神经网络",
+    "source_dir": "chapter_convolutional-neural-networks",
+    "sections": [
+      {
+        "source": "conv-layer.md",
+        "output": "chapters/chapter_06_convolutional_neural_networks/conv_layer.py",
+        "blocks": 10
+      },
+      {
+        "source": "padding-and-strides.md",
+        "output": "chapters/chapter_06_convolutional_neural_networks/padding_and_strides.py",
+        "blocks": 4
+      },
+      {
+        "source": "channels.md",
+        "output": "chapters/chapter_06_convolutional_neural_networks/channels.py",
+        "blocks": 9
+      },
+      {
+        "source": "pooling.md",
+        "output": "chapters/chapter_06_convolutional_neural_networks/pooling.py",
+        "blocks": 10
+      },
+      {
+        "source": "lenet.md",
+        "output": "chapters/chapter_06_convolutional_neural_networks/lenet.py",
+        "blocks": 6
+      }
+    ]
+  },
+  {
+    "chapter": "07",
+    "title": "现代卷积神经网络",
+    "source_dir": "chapter_convolutional-modern",
+    "sections": [
+      {
+        "source": "alexnet.md",
+        "output": "chapters/chapter_07_modern_convolutional_networks/alexnet.py",
+        "blocks": 4
+      },
+      {
+        "source": "vgg.md",
+        "output": "chapters/chapter_07_modern_convolutional_networks/vgg.py",
+        "blocks": 6
+      },
+      {
+        "source": "nin.md",
+        "output": "chapters/chapter_07_modern_convolutional_networks/nin.py",
+        "blocks": 4
+      },
+      {
+        "source": "googlenet.md",
+        "output": "chapters/chapter_07_modern_convolutional_networks/googlenet.py",
+        "blocks": 8
+      },
+      {
+        "source": "batch-norm.md",
+        "output": "chapters/chapter_07_modern_convolutional_networks/batch_norm.py",
+        "blocks": 7
+      },
+      {
+        "source": "resnet.md",
+        "output": "chapters/chapter_07_modern_convolutional_networks/resnet.py",
+        "blocks": 9
+      },
+      {
+        "source": "densenet.md",
+        "output": "chapters/chapter_07_modern_convolutional_networks/densenet.py",
+        "blocks": 9
+      }
+    ]
+  },
+  {
+    "chapter": "08",
+    "title": "循环神经网络",
+    "source_dir": "chapter_recurrent-neural-networks",
+    "sections": [
+      {
+        "source": "sequence.md",
+        "output": "chapters/chapter_08_recurrent_neural_networks/sequence.py",
+        "blocks": 12
+      },
+      {
+        "source": "text-preprocessing.md",
+        "output": "chapters/chapter_08_recurrent_neural_networks/text_preprocessing.py",
+        "blocks": 7
+      },
+      {
+        "source": "language-models-and-dataset.md",
+        "output": "chapters/chapter_08_recurrent_neural_networks/language_models_and_dataset.py",
+        "blocks": 12
+      },
+      {
+        "source": "rnn.md",
+        "output": "chapters/chapter_08_recurrent_neural_networks/rnn.py",
+        "blocks": 3
+      },
+      {
+        "source": "rnn-scratch.md",
+        "output": "chapters/chapter_08_recurrent_neural_networks/rnn_scratch.py",
+        "blocks": 16
+      },
+      {
+        "source": "rnn-concise.md",
+        "output": "chapters/chapter_08_recurrent_neural_networks/rnn_concise.py",
+        "blocks": 7
+      }
+    ]
+  },
+  {
+    "chapter": "09",
+    "title": "现代循环神经网络",
+    "source_dir": "chapter_recurrent-modern",
+    "sections": [
+      {
+        "source": "gru.md",
+        "output": "chapters/chapter_09_modern_recurrent_neural_networks/gru.py",
+        "blocks": 6
+      },
+      {
+        "source": "lstm.md",
+        "output": "chapters/chapter_09_modern_recurrent_neural_networks/lstm.py",
+        "blocks": 6
+      },
+      {
+        "source": "deep-rnn.md",
+        "output": "chapters/chapter_09_modern_recurrent_neural_networks/deep_rnn.py",
+        "blocks": 3
+      },
+      {
+        "source": "bi-rnn.md",
+        "output": "chapters/chapter_09_modern_recurrent_neural_networks/bi_rnn.py",
+        "blocks": 1
+      },
+      {
+        "source": "machine-translation-and-dataset.md",
+        "output": "chapters/chapter_09_modern_recurrent_neural_networks/machine_translation_and_dataset.py",
+        "blocks": 10
+      },
+      {
+        "source": "encoder-decoder.md",
+        "output": "chapters/chapter_09_modern_recurrent_neural_networks/encoder_decoder.py",
+        "blocks": 3
+      },
+      {
+        "source": "seq2seq.md",
+        "output": "chapters/chapter_09_modern_recurrent_neural_networks/seq2seq.py",
+        "blocks": 15
+      }
+    ]
+  },
+  {
+    "chapter": "10",
+    "title": "注意力机制",
+    "source_dir": "chapter_attention-mechanisms",
+    "sections": [
+      {
+        "source": "attention-cues.md",
+        "output": "chapters/chapter_10_attention_mechanisms/attention_cues.py",
+        "blocks": 3
+      },
+      {
+        "source": "nadaraya-waston.md",
+        "output": "chapters/chapter_10_attention_mechanisms/nadaraya_waston.py",
+        "blocks": 14
+      },
+      {
+        "source": "attention-scoring-functions.md",
+        "output": "chapters/chapter_10_attention_mechanisms/attention_scoring_functions.py",
+        "blocks": 10
+      },
+      {
+        "source": "bahdanau-attention.md",
+        "output": "chapters/chapter_10_attention_mechanisms/bahdanau_attention.py",
+        "blocks": 8
+      },
+      {
+        "source": "multihead-attention.md",
+        "output": "chapters/chapter_10_attention_mechanisms/multihead_attention.py",
+        "blocks": 5
+      },
+      {
+        "source": "self-attention-and-positional-encoding.md",
+        "output": "chapters/chapter_10_attention_mechanisms/self_attention_and_positional_encoding.py",
+        "blocks": 7
+      },
+      {
+        "source": "transformer.md",
+        "output": "chapters/chapter_10_attention_mechanisms/transformer.py",
+        "blocks": 20
+      }
+    ]
+  },
+  {
+    "chapter": "11",
+    "title": "优化算法",
+    "source_dir": "chapter_optimization",
+    "sections": [
+      {
+        "source": "optimization-intro.md",
+        "output": "chapters/chapter_11_optimization/optimization_intro.py",
+        "blocks": 7
+      },
+      {
+        "source": "convexity.md",
+        "output": "chapters/chapter_11_optimization/convexity.py",
+        "blocks": 3
+      },
+      {
+        "source": "gd.md",
+        "output": "chapters/chapter_11_optimization/gd.py",
+        "blocks": 12
+      },
+      {
+        "source": "sgd.md",
+        "output": "chapters/chapter_11_optimization/sgd.py",
+        "blocks": 6
+      },
+      {
+        "source": "minibatch-sgd.md",
+        "output": "chapters/chapter_11_optimization/minibatch_sgd.py",
+        "blocks": 15
+      },
+      {
+        "source": "momentum.md",
+        "output": "chapters/chapter_11_optimization/momentum.py",
+        "blocks": 12
+      },
+      {
+        "source": "adagrad.md",
+        "output": "chapters/chapter_11_optimization/adagrad.py",
+        "blocks": 6
+      },
+      {
+        "source": "rmsprop.md",
+        "output": "chapters/chapter_11_optimization/rmsprop.py",
+        "blocks": 7
+      },
+      {
+        "source": "adadelta.md",
+        "output": "chapters/chapter_11_optimization/adadelta.py",
+        "blocks": 3
+      },
+      {
+        "source": "adam.md",
+        "output": "chapters/chapter_11_optimization/adam.py",
+        "blocks": 4
+      },
+      {
+        "source": "lr-scheduler.md",
+        "output": "chapters/chapter_11_optimization/lr_scheduler.py",
+        "blocks": 13
+      }
+    ]
+  },
+  {
+    "chapter": "12",
+    "title": "计算性能",
+    "source_dir": "chapter_computational-performance",
+    "sections": [
+      {
+        "source": "hybridize.md",
+        "output": "chapters/chapter_12_computational_performance/hybridize.py",
+        "blocks": 7
+      },
+      {
+        "source": "async-computation.md",
+        "output": "chapters/chapter_12_computational_performance/async_computation.py",
+        "blocks": 4
+      },
+      {
+        "source": "auto-parallelism.md",
+        "output": "chapters/chapter_12_computational_performance/auto_parallelism.py",
+        "blocks": 6
+      },
+      {
+        "source": "multiple-gpus.md",
+        "output": "chapters/chapter_12_computational_performance/multiple_gpus.py",
+        "blocks": 12
+      },
+      {
+        "source": "multiple-gpus-concise.md",
+        "output": "chapters/chapter_12_computational_performance/multiple_gpus_concise.py",
+        "blocks": 6
+      }
+    ]
+  },
+  {
+    "chapter": "13",
+    "title": "计算机视觉",
+    "source_dir": "chapter_computer-vision",
+    "sections": [
+      {
+        "source": "image-augmentation.md",
+        "output": "chapters/chapter_13_computer_vision/image_augmentation.py",
+        "blocks": 17
+      },
+      {
+        "source": "fine-tuning.md",
+        "output": "chapters/chapter_13_computer_vision/fine_tuning.py",
+        "blocks": 13
+      },
+      {
+        "source": "bounding-box.md",
+        "output": "chapters/chapter_13_computer_vision/bounding_box.py",
+        "blocks": 7
+      },
+      {
+        "source": "anchor.md",
+        "output": "chapters/chapter_13_computer_vision/anchor.py",
+        "blocks": 22
+      },
+      {
+        "source": "multiscale-object-detection.md",
+        "output": "chapters/chapter_13_computer_vision/multiscale_object_detection.py",
+        "blocks": 5
+      },
+      {
+        "source": "object-detection-dataset.md",
+        "output": "chapters/chapter_13_computer_vision/object_detection_dataset.py",
+        "blocks": 7
+      },
+      {
+        "source": "ssd.md",
+        "output": "chapters/chapter_13_computer_vision/ssd.py",
+        "blocks": 23
+      },
+      {
+        "source": "rcnn.md",
+        "output": "chapters/chapter_13_computer_vision/rcnn.py",
+        "blocks": 3
+      },
+      {
+        "source": "semantic-segmentation-and-dataset.md",
+        "output": "chapters/chapter_13_computer_vision/semantic_segmentation_and_dataset.py",
+        "blocks": 13
+      },
+      {
+        "source": "transposed-conv.md",
+        "output": "chapters/chapter_13_computer_vision/transposed_conv.py",
+        "blocks": 11
+      },
+      {
+        "source": "fcn.md",
+        "output": "chapters/chapter_13_computer_vision/fcn.py",
+        "blocks": 15
+      },
+      {
+        "source": "neural-style.md",
+        "output": "chapters/chapter_13_computer_vision/neural_style.py",
+        "blocks": 17
+      },
+      {
+        "source": "kaggle-cifar10.md",
+        "output": "chapters/chapter_13_computer_vision/kaggle_cifar10.py",
+        "blocks": 15
+      },
+      {
+        "source": "kaggle-dog.md",
+        "output": "chapters/chapter_13_computer_vision/kaggle_dog.py",
+        "blocks": 12
+      }
+    ]
+  },
+  {
+    "chapter": "14",
+    "title": "自然语言处理：预训练",
+    "source_dir": "chapter_natural-language-processing-pretraining",
+    "sections": [
+      {
+        "source": "word-embedding-dataset.md",
+        "output": "chapters/chapter_14_nlp_pretraining/word_embedding_dataset.py",
+        "blocks": 18
+      },
+      {
+        "source": "word2vec-pretraining.md",
+        "output": "chapters/chapter_14_nlp_pretraining/word2vec_pretraining.py",
+        "blocks": 12
+      },
+      {
+        "source": "subword-embedding.md",
+        "output": "chapters/chapter_14_nlp_pretraining/subword_embedding.py",
+        "blocks": 9
+      },
+      {
+        "source": "similarity-analogy.md",
+        "output": "chapters/chapter_14_nlp_pretraining/similarity_analogy.py",
+        "blocks": 16
+      },
+      {
+        "source": "bert.md",
+        "output": "chapters/chapter_14_nlp_pretraining/bert.py",
+        "blocks": 12
+      },
+      {
+        "source": "bert-dataset.md",
+        "output": "chapters/chapter_14_nlp_pretraining/bert_dataset.py",
+        "blocks": 11
+      },
+      {
+        "source": "bert-pretraining.md",
+        "output": "chapters/chapter_14_nlp_pretraining/bert_pretraining.py",
+        "blocks": 9
+      }
+    ]
+  },
+  {
+    "chapter": "15",
+    "title": "自然语言处理：应用",
+    "source_dir": "chapter_natural-language-processing-applications",
+    "sections": [
+      {
+        "source": "sentiment-analysis-and-dataset.md",
+        "output": "chapters/chapter_15_nlp_applications/sentiment_analysis_and_dataset.py",
+        "blocks": 8
+      },
+      {
+        "source": "sentiment-analysis-rnn.md",
+        "output": "chapters/chapter_15_nlp_applications/sentiment_analysis_rnn.py",
+        "blocks": 11
+      },
+      {
+        "source": "sentiment-analysis-cnn.md",
+        "output": "chapters/chapter_15_nlp_applications/sentiment_analysis_cnn.py",
+        "blocks": 10
+      },
+      {
+        "source": "natural-language-inference-and-dataset.md",
+        "output": "chapters/chapter_15_nlp_applications/natural_language_inference_and_dataset.py",
+        "blocks": 8
+      },
+      {
+        "source": "natural-language-inference-attention.md",
+        "output": "chapters/chapter_15_nlp_applications/natural_language_inference_attention.py",
+        "blocks": 11
+      },
+      {
+        "source": "natural-language-inference-bert.md",
+        "output": "chapters/chapter_15_nlp_applications/natural_language_inference_bert.py",
+        "blocks": 9
+      }
+    ]
+  }
+]

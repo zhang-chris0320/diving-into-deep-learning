@@ -32,8 +32,6 @@ python -m http.server 4173
 
 <https://zhang-chris0320.github.io/diving-into-deep-learning/>
 
-网站通过 GitHub Pages 自动发布，不依赖 `chatgpt.site`。更新 `website/dist/` 后，GitHub Actions 会自动部署最新版本。
-
 ## 说明
 
 本仓库不包含原书 PDF，仅整理代码、结构图和学习辅助材料。代码中的章节说明与示例来源于 D2L 中文 PyTorch 版本，使用时请遵守原书和相关项目的许可要求。

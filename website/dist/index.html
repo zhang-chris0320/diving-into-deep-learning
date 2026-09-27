@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b1726" />
+  <meta name="description" content="《动手学深度学习（PyTorch 第二版）》第 3-15 章网络结构图谱，按大网络模块浏览。" />
+  <title>深度网络图谱 · 第 3-15 章</title>
+  <style>
+    @font-face {
+      font-family: "WenKai";
+      src: url("./LXGWWenKai-Regular.ttf") format("truetype");
+      font-display: swap;
+    }
+    :root {
+      --ink: #112235;
+      --muted: #64748b;
+      --paper: #f5f7fb;
+      --card: #ffffff;
+      --line: #dbe4ee;
+      --blue: #2f6fed;
+      --teal: #0e9f8b;
+      --amber: #e99520;
+      --violet: #7657df;
+      --green: #159947;
+      --shadow: 0 18px 48px rgba(16, 39, 68, .09);
+      font-family: "WenKai", "Kaiti SC", "STKaiti", "Songti SC", serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 4%, rgba(47,111,237,.10), transparent 28rem),
+        radial-gradient(circle at 96% 10%, rgba(14,159,139,.09), transparent 25rem),
+        var(--paper);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    button { font: inherit; }
+    .app-shell { min-height: 100vh; }
+    .topbar {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      padding: 14px clamp(18px, 4vw, 64px);
+      background: rgba(245,247,251,.90);
+      border-bottom: 1px solid rgba(219,228,238,.86);
+      backdrop-filter: blur(18px);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: .02em; }
+    .brand-mark {
+      display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px;
+      color: #fff; background: var(--ink); box-shadow: 4px 4px 0 rgba(47,111,237,.22);
+      font-family: Georgia, serif; font-size: 22px; font-weight: 400;
+    }
+    .eyebrow, .source-chip { color: var(--muted); font-size: 13px; font-weight: 400; }
+    .source-chip { white-space: nowrap; }
+    .container { width: min(1480px, calc(100% - 36px)); margin: 0 auto; }
+    .hero {
+      display: grid; grid-template-columns: minmax(0, 1.06fr) minmax(330px, .94fr); gap: 34px;
+      align-items: center; padding: 42px 0 32px;
+    }
+    .kicker { margin: 0 0 10px; color: var(--blue); font-size: 14px; font-weight: 700; letter-spacing: .14em; }
+    h1 { max-width: 720px; margin: 0; font-size: clamp(34px, 5vw, 68px); line-height: 1.08; letter-spacing: -.045em; }
+    .hero-copy > p:not(.kicker) { max-width: 650px; margin: 22px 0 0; color: #4d6278; font-size: 18px; }
+    .stats { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .stat {
+      display: inline-flex; align-items: baseline; gap: 7px; padding: 8px 12px; border: 1px solid var(--line);
+      border-radius: 12px; background: rgba(255,255,255,.68); color: var(--muted); font-size: 13px;
+    }
+    .stat strong { color: var(--ink); font-size: 20px; }
+    .hero-map {
+      min-height: 260px; padding: 16px; border: 1px solid var(--line); border-radius: 26px;
+      background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(236,243,250,.84)); box-shadow: var(--shadow);
+    }
+    .hero-map svg { display: block; width: 100%; height: 260px; }
+    .hero-map .orbit { fill: none; stroke: #c9d8ea; stroke-width: 1.4; stroke-dasharray: 5 8; }
+    .hero-map .thread { stroke: #7890ad; stroke-width: 1.2; opacity: .62; }
+    .hero-map .dot { stroke: #fff; stroke-width: 3; }
+    .hero-map text { font-family: "WenKai", serif; fill: #41566f; font-size: 13px; }
+    .workspace { display: grid; grid-template-columns: 310px minmax(0, 1fr); gap: 22px; padding: 18px 0 72px; }
+    .module-rail, .detail-stage { border: 1px solid var(--line); border-radius: 24px; background: rgba(255,255,255,.78); box-shadow: var(--shadow); }
+    .module-rail { align-self: start; position: sticky; top: 78px; max-height: calc(100vh - 100px); overflow: auto; padding: 18px; }
+    .rail-head { display: flex; align-items: end; justify-content: space-between; margin: 0 2px 14px; }
+    .rail-head h2 { margin: 0; font-size: 20px; }
+    .rail-head span { color: var(--muted); font-size: 13px; }
+    .module-list { display: grid; gap: 9px; }
+    .module-button {
+      position: relative; display: grid; grid-template-columns: 36px 1fr auto; align-items: center; gap: 10px;
+      width: 100%; padding: 11px 10px; color: var(--ink); text-align: left; cursor: pointer;
+      border: 1px solid transparent; border-radius: 15px; background: transparent; transition: .18s ease;
+    }
+    .module-button:hover { background: #f2f6fc; border-color: #dce7f4; transform: translateX(2px); }
+    .module-button.is-active { background: #ecf3ff; border-color: #b9d0ff; box-shadow: inset 4px 0 0 var(--accent); }
+    .module-icon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 11px; color: #fff; background: var(--accent); font-family: Georgia, serif; font-size: 18px; }
+    .module-copy strong { display: block; font-size: 15px; line-height: 1.25; }
+    .module-copy small { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
+    .module-chapter { align-self: start; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+    .detail-stage { min-width: 0; padding: clamp(20px, 3vw, 36px); }
+    .detail-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-bottom: 18px; color: var(--muted); font-size: 14px; }
+    .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border: 1px solid #cddbeb; border-radius: 999px; background: #f7faff; }
+    .chapter-badge i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+    .detail-grid { display: grid; grid-template-columns: minmax(260px, .68fr) minmax(500px, 1.32fr); gap: 26px; align-items: start; }
+    .detail-intro h2 { margin: 0; font-size: clamp(30px, 4vw, 52px); line-height: 1.08; letter-spacing: -.04em; }
+    .detail-intro .summary { margin: 18px 0 0; color: #4d6278; font-size: 17px; }
+    .note-card { margin-top: 22px; padding: 16px; border-left: 4px solid var(--accent); border-radius: 15px; background: #f1f6fd; }
+    .note-card strong { display: block; margin-bottom: 6px; color: var(--accent); font-size: 14px; }
+    .note-card p { margin: 0; color: #3c536d; font-size: 15px; }
+    .code-entry { margin-top: 22px; }
+    .code-entry h3 { margin: 0 0 9px; font-size: 14px; color: var(--muted); }
+    .code-link { display: block; margin-top: 7px; padding: 9px 11px; overflow-wrap: anywhere; color: #34577f; border: 1px solid var(--line); border-radius: 10px; background: #fbfdff; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; text-decoration: none; }
+    .code-link:hover { border-color: #aac6ee; color: var(--blue); }
+    .diagram-card { min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: 22px; background: linear-gradient(145deg, #fbfdff, #edf4fb); }
+    .diagram-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+    .diagram-head h3 { margin: 0; font-size: 15px; }
+    .diagram-head span { color: var(--muted); font-size: 13px; }
+    #diagram { display: block; width: 100%; min-height: 330px; height: auto; overflow: visible; }
+    .diagram-bg { fill: #f8fbff; stroke: #d6e3f0; stroke-width: 1.2; }
+    .diagram-lane { fill: none; stroke: #d2dfec; stroke-width: 1.5; stroke-dasharray: 5 8; }
+    .diagram-node rect { fill: #fff; stroke: var(--accent); stroke-width: 2; }
+    .diagram-node .icon-disc { fill: var(--accent); }
+    .diagram-node .icon { fill: #fff; font: 700 18px Georgia, serif; text-anchor: middle; }
+    .diagram-node .node-label { fill: #152b44; font: 700 14px "WenKai", serif; text-anchor: middle; }
+    .diagram-node .node-sub { fill: #6b7f94; font: 12px "WenKai", serif; text-anchor: middle; }
+    .diagram-arrow { fill: none; stroke: var(--accent); stroke-width: 2.2; marker-end: url(#arrow); }
+    .diagram-arrow.secondary { stroke: #94a8bd; stroke-dasharray: 5 6; }
+    .legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 13px; padding-top: 11px; border-top: 1px solid #dbe4ee; color: var(--muted); font-size: 12px; }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .legend b { display: inline-block; width: 10px; height: 10px; border-radius: 3px; background: var(--c); }
+    .module-footer { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+    .module-footer span { padding: 5px 9px; border-radius: 999px; background: #f0f4f9; }
+    .empty { padding: 28px; text-align: center; color: var(--muted); }
+    @media (max-width: 1000px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-map { max-width: 720px; }
+      .workspace { grid-template-columns: 1fr; }
+      .module-rail { position: static; max-height: none; }
+      .module-list { display: flex; overflow-x: auto; padding-bottom: 4px; }
+      .module-button { min-width: 220px; }
+    }
+    @media (max-width: 720px) {
+      .topbar { align-items: flex-start; flex-direction: column; gap: 5px; }
+      .source-chip { white-space: normal; }
+      .container { width: min(100% - 24px, 1480px); }
+      .hero { padding-top: 30px; }
+      .hero-copy > p:not(.kicker) { font-size: 16px; }
+      .detail-grid { grid-template-columns: 1fr; }
+      #diagram { min-height: 290px; }
+      .module-button { min-width: 200px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">λ</span><span>深度网络图谱</span><span class="eyebrow">第 3-15 章 · 纯 PyTorch</span></div>
+      <div class="source-chip">来源：《动手学深度学习（PyTorch 第二版）》</div>
+    </header>
+
+    <main class="container">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="kicker">读代码前先看结构</p>
+          <h1 id="page-title">每个大网络，<br />都有一张可读的路线图。</h1>
+          <p>按章节浏览网络模块。先看图形化的数据流，再看核心模块、输出和对应的纯 PyTorch 代码。</p>
+          <div class="stats" aria-label="内容统计">
+            <span class="stat"><strong>13</strong> 个章节</span>
+            <span class="stat"><strong>20+</strong> 个大网络</span>
+            <span class="stat"><strong>95</strong> 个代码小节</span>
+          </div>
+        </div>
+        <div class="hero-map" aria-label="网络模块关系图">
+          <svg viewBox="0 0 520 260" role="img" aria-label="卷积、循环、注意力和预训练网络的关系">
+            <ellipse class="orbit" cx="260" cy="132" rx="196" ry="94" />
+            <ellipse class="orbit" cx="260" cy="132" rx="126" ry="60" />
+            <path class="thread" d="M78 150 C150 77 190 197 270 117 S380 64 445 132" />
+            <path class="thread" d="M86 92 C180 214 229 55 318 148 S409 206 456 88" />
+            <circle class="dot" cx="118" cy="102" r="13" fill="#2f6fed" />
+            <circle class="dot" cx="226" cy="70" r="13" fill="#0e9f8b" />
+            <circle class="dot" cx="357" cy="92" r="13" fill="#e99520" />
+            <circle class="dot" cx="408" cy="170" r="13" fill="#7657df" />
+            <circle class="dot" cx="278" cy="194" r="13" fill="#159947" />
+            <circle class="dot" cx="130" cy="177" r="13" fill="#112235" />
+            <text x="86" y="72">CNN</text><text x="208" y="43">RNN</text><text x="340" y="66">Attention</text>
+            <text x="389" y="205">BERT</text><text x="260" y="230">Vision</text><text x="83" y="207">MLP</text>
+          </svg>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="网络模块浏览区">
+        <aside class="module-rail">
+          <div class="rail-head"><h2>网络模块</h2><span id="moduleCount"></span></div>
+          <div id="moduleList" class="module-list"></div>
+        </aside>
+        <section class="detail-stage" aria-live="polite">
+          <div class="detail-toolbar">
+            <span id="detailChapter" class="chapter-badge"><i></i><b></b></span>
+            <span id="detailCategory"></span>
+          </div>
+          <div class="detail-grid">
+            <article class="detail-intro">
+              <h2 id="detailTitle"></h2>
+              <p id="detailSummary" class="summary"></p>
+              <div class="note-card"><strong>怎么读这张图</strong><p id="detailNote"></p></div>
+              <div class="code-entry"><h3>对应代码</h3><div id="codeLinks"></div></div>
+            </article>
+            <article class="diagram-card">
+              <div class="diagram-head"><h3>结构图 · 从输入走到输出</h3><span id="diagramCaption"></span></div>
+              <svg id="diagram" viewBox="0 0 860 390" role="img" aria-label="当前网络结构图"></svg>
+              <div class="legend" aria-label="图例">
+                <span><b style="--c:#2f6fed"></b>输入/输出</span>
+                <span><b style="--c:#0e9f8b"></b>卷积/特征</span>
+                <span><b style="--c:#e99520"></b>池化/压缩</span>
+                <span><b style="--c:#7657df"></b>循环/注意力</span>
+                <span><b style="--c:#159947"></b>任务头</span>
+              </div>
+            </article>
+          </div>
+          <div id="moduleFooter" class="module-footer"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const modules = [
+      {id:'linear', chapter:'03', chapterName:'线性神经网络', title:'线性回归 / Softmax 回归', category:'线性模型', icon:'λ', accent:'#2f6fed', summary:'从一个线性映射开始，理解特征、logits、损失函数和分类输出如何连接起来。', note:'先看输入特征如何进入 nn.Linear，再看回归值或类别 logits 如何交给损失函数。Softmax 回归使用交叉熵时直接处理 logits。', tags:['线性映射','logits','交叉熵'], code:['chapters/chapter_03_linear_networks/linear_regression.py','chapters/chapter_03_linear_networks/softmax_regression_concise.py'], nodes:[['输入特征','样本张量','input'],['nn.Linear','线性映射','dense'],['预测值 / logits','模型输出','output']]},
+      {id:'mlp', chapter:'04', chapterName:'多层感知机', title:'多层感知机 MLP', category:'全连接网络', icon:'⊙', accent:'#2f6fed', summary:'用 Linear、ReLU 和多层组合把线性模型扩展成能够拟合非线性关系的全连接网络。', note:'ReLU 是关键的非线性节点；读代码时逐层核对输入维度、隐藏维度和最后的类别数。', tags:['Linear','ReLU','Dropout / 权重衰减'], code:['chapters/chapter_04_multilayer_perceptrons/mlp_concise.py','chapters/chapter_04_multilayer_perceptrons/dropout.py'], nodes:[['输入特征','784 维','input'],['Linear','256 units','dense'],['ReLU','非线性','activation'],['Linear','10 类','output']]},
+      {id:'lenet', chapter:'06', chapterName:'卷积神经网络', title:'LeNet', category:'经典 CNN', icon:'▦', accent:'#0e9f8b', summary:'第一张完整的卷积分类网络图：卷积提取局部特征，池化压缩空间尺寸，全连接层完成分类。', note:'沿着图从左向右看尺寸变化：1×28×28 图像经过两组 Conv + Pool，最后变成 10 类输出。', tags:['Conv2d','MaxPool','分类头'], code:['chapters/chapter_06_convolutional_neural_networks/lenet.py'], nodes:[['图像','1×28×28','input'],['Conv','6 个特征图','conv'],['Pool','空间压缩','pool'],['Conv','16 个特征图','conv'],['Pool','空间压缩','pool'],['FC','120→84→10','output']]},
+      {id:'alexnet', chapter:'07', chapterName:'现代卷积神经网络', title:'AlexNet', category:'深层 CNN', icon:'▥', accent:'#0e9f8b', summary:'用更深的卷积堆叠、更大的数据增强和 Dropout 把图像分类推向深层网络。', note:'卷积主干负责提取层级特征，最后的 FC 堆叠负责把图像表示映射到类别。', tags:['卷积堆叠','MaxPool','Dropout'], code:['chapters/chapter_07_modern_convolutional_networks/alexnet.py'], nodes:[['图像','输入','input'],['Conv Block','局部特征','conv'],['Pool','下采样','pool'],['FC Block','高维表示','dense'],['类别','输出 logits','output']]},
+      {id:'vgg', chapter:'07', chapterName:'现代卷积神经网络', title:'VGG', category:'深层 CNN', icon:'▤', accent:'#0e9f8b', summary:'用结构规整、可重复的卷积块构建深度网络，图形上像一串层层叠叠的积木。', note:'每个 VGG block 通常由多个 Conv + ReLU 组成，Pool 负责阶段切换和尺寸压缩。', tags:['重复卷积块','模块化','分类头'], code:['chapters/chapter_07_modern_convolutional_networks/vgg.py'], nodes:[['图像','输入','input'],['VGG Block × N','Conv + ReLU','conv'],['Pool','阶段切换','pool'],['FC','分类头','dense'],['类别','输出','output']]},
+      {id:'inception', chapter:'07', chapterName:'现代卷积神经网络', title:'GoogLeNet / Inception', category:'多分支 CNN', icon:'✣', accent:'#0e9f8b', summary:'不同尺度的卷积并行工作，再把分支结果沿通道方向合并。', note:'图中的四条分支代表不同感受野；Concat 是汇合点，读代码时注意通道数相加。', tags:['多分支','1×1 Conv','Concat'], code:['chapters/chapter_07_modern_convolutional_networks/googlenet.py'], mode:'branches'},
+      {id:'resnet', chapter:'07', chapterName:'现代卷积神经网络', title:'ResNet', category:'残差 CNN', icon:'↪', accent:'#0e9f8b', summary:'通过 Identity 捷径让信息和梯度绕过主分支，解决深层网络训练困难。', note:'主分支和捷径分支在加法节点汇合；如果空间尺寸或通道数改变，就需要投影捷径。', tags:['Residual','Identity','Skip connection'], code:['chapters/chapter_07_modern_convolutional_networks/resnet.py'], mode:'residual'},
+      {id:'densenet', chapter:'07', chapterName:'现代卷积神经网络', title:'DenseNet', category:'密集连接 CNN', icon:'⊕', accent:'#0e9f8b', summary:'每一层都接收前面所有层的特征，特征图像一串不断增长的记忆库。', note:'Concat 会让通道维度增长；它和 ResNet 的“相加”不同，阅读时不要混淆。', tags:['Dense block','Concat','特征复用'], code:['chapters/chapter_07_modern_convolutional_networks/densenet.py'], nodes:[['输入','特征图','input'],['层 1','新特征','conv'],['Concat','累积特征','concat'],['层 2','新特征','conv'],['Dense Block','继续拼接','output']]},
+      {id:'rnn', chapter:'08', chapterName:'循环神经网络', title:'RNN 语言模型', category:'循环网络', icon:'↻', accent:'#7657df', summary:'用隐藏状态 h_t 沿着时间步传递上下文，再为每个时间步预测词表 logits。', note:'注意序列、批量和词表三个维度；h_t 是跨时间步传递信息的核心。', tags:['hidden state','时间步','词表 logits'], code:['chapters/chapter_08_recurrent_neural_networks/rnn_concise.py'], nodes:[['Token','输入序列','input'],['RNN','hₜ 状态','recurrent'],['Linear','映射到词表','dense'],['Logits','下一词分布','output']]},
+      {id:'gru', chapter:'09', chapterName:'现代循环神经网络', title:'GRU', category:'门控循环网络', icon:'G', accent:'#7657df', summary:'更新门和重置门控制历史信息的保留与遗忘，在长序列上比基础 RNN 更稳定。', note:'两道门是 GRU 的图形重点：一条控制记忆保留，一条控制当前输入如何重置旧状态。', tags:['Update gate','Reset gate','状态'], code:['chapters/chapter_09_modern_recurrent_neural_networks/gru.py'], nodes:[['Token','输入序列','input'],['GRU','门控状态','recurrent'],['Linear','词表映射','dense'],['Logits','输出','output']]},
+      {id:'lstm', chapter:'09', chapterName:'现代循环神经网络', title:'LSTM', category:'门控循环网络', icon:'L', accent:'#7657df', summary:'同时维护隐藏状态 h 和记忆单元 c，用多道门控制长期信息。', note:'图中两条状态线分别对应 h_t 与 c_t；它们共同决定下一时间步的表示。', tags:['hₜ','cₜ','多重门控'], code:['chapters/chapter_09_modern_recurrent_neural_networks/lstm.py'], nodes:[['Token','输入序列','input'],['LSTM','hₜ + cₜ','recurrent'],['Linear','词表映射','dense'],['Logits','输出','output']]},
+      {id:'seq2seq', chapter:'09', chapterName:'现代循环神经网络', title:'Seq2Seq 编码器-解码器', category:'序列到序列', icon:'⇄', accent:'#7657df', summary:'Encoder 读源序列，Decoder 根据上下文逐步生成目标序列，是机器翻译的基础框架。', note:'编码器和解码器处理的序列方向不同；训练时常用真实目标词帮助解码器学习。', tags:['Encoder','Context','Decoder'], code:['chapters/chapter_09_modern_recurrent_neural_networks/seq2seq.py'], nodes:[['源序列','Source tokens','input'],['Encoder','压缩上下文','recurrent'],['Context','中间状态','attention'],['Decoder','逐步生成','recurrent'],['目标序列','Target tokens','output']]},
+      {id:'attention', chapter:'10', chapterName:'注意力机制', title:'Attention', category:'注意力模块', icon:'✦', accent:'#e99520', summary:'用 Query、Key、Value 计算相关性，再把重要信息加权汇总。', note:'Query 是问题，Key 是匹配依据，Value 是被汇总的内容；先分清三者再看评分函数。', tags:['Query','Key','Value'], code:['chapters/chapter_10_attention_mechanisms/attention_scoring_functions.py'], nodes:[['Query','要寻找什么','input'],['Key','匹配相关性','attention'],['Softmax','注意力权重','attention'],['Value','加权汇总','output']]},
+      {id:'transformer', chapter:'10', chapterName:'注意力机制', title:'Transformer', category:'注意力网络', icon:'✦', accent:'#e99520', summary:'用多头自注意力连接序列中的 token，再堆叠 Encoder / Decoder block。', note:'位置编码补充顺序信息，多头注意力建模 token 间关系，最后由任务头输出结果。', tags:['Multi-Head Attention','Encoder','Decoder'], code:['chapters/chapter_10_attention_mechanisms/transformer.py'], mode:'transformer'},
+      {id:'ssd', chapter:'13', chapterName:'计算机视觉', title:'SSD', category:'目标检测网络', icon:'⌗', accent:'#159947', summary:'在多个尺度的特征图上同时预测类别和边界框，最后用 NMS 筛掉重复候选。', note:'一张图会产生多尺度候选框；Class Head 和 Box Head 分别回答“是什么”和“在哪里”。', tags:['多尺度','Class Head','Box Head','NMS'], code:['chapters/chapter_13_computer_vision/ssd.py'], mode:'multi'},
+      {id:'fcn', chapter:'13', chapterName:'计算机视觉', title:'FCN', category:'语义分割网络', icon:'▧', accent:'#159947', summary:'把图像变成逐像素的类别图，用转置卷积把低分辨率特征恢复到原尺寸。', note:'输出不再是一个类别，而是每个像素位置的 logits；上采样是结构里的关键动作。', tags:['Backbone','转置卷积','像素类别'], code:['chapters/chapter_13_computer_vision/fcn.py'], nodes:[['图像','输入','input'],['Backbone','低分辨率特征','conv'],['1×1 Conv','像素分类','dense'],['转置卷积','上采样','pool'],['像素类别','输出掩码','output']]},
+      {id:'word2vec', chapter:'14', chapterName:'自然语言处理：预训练', title:'Word2Vec', category:'词向量网络', icon:'∷', accent:'#7657df', summary:'中心词与上下文词查表得到向量，通过点积和负采样损失学习语义空间。', note:'中心词和上下文词使用不同的向量表；负采样让模型学会区分真实共现与随机词。', tags:['Embedding','负采样','语义空间'], code:['chapters/chapter_14_nlp_pretraining/word2vec_pretraining.py'], nodes:[['中心词','token','input'],['Embedding','查表','dense'],['点积','中心-上下文','attention'],['负采样损失','训练信号','output']]},
+      {id:'bert', chapter:'14', chapterName:'自然语言处理：预训练', title:'BERT', category:'预训练 Transformer', icon:'B', accent:'#7657df', summary:'Token、Segment、Position 三种输入嵌入进入多层 Transformer Encoder，再连接预训练任务头。', note:'BERT 的核心是双向 Encoder；MLM 和 NSP 是训练目标，不是 Encoder 本身。', tags:['双向 Encoder','MLM','NSP'], code:['chapters/chapter_14_nlp_pretraining/bert.py','chapters/chapter_14_nlp_pretraining/bert_pretraining.py'], mode:'transformer'},
+      {id:'textcnn', chapter:'15', chapterName:'自然语言处理：应用', title:'TextCNN', category:'文本卷积网络', icon:'▦', accent:'#7657df', summary:'不同宽度的 Conv1d 捕捉不同长度的 n-gram，池化后汇总为句子级情感表示。', note:'多个卷积宽度对应不同长度的局部模式；MaxPool 把每个模式压缩成一个强响应。', tags:['Conv1d','n-gram','MaxPool'], code:['chapters/chapter_15_nlp_applications/sentiment_analysis_cnn.py'], nodes:[['Token Embedding','句子表示','input'],['Conv1d 多尺度','n-gram','conv'],['MaxPool','局部汇总','pool'],['Linear','任务头','dense'],['情感类别','输出','output']]},
+      {id:'birnn', chapter:'15', chapterName:'自然语言处理：应用', title:'BiRNN 情感分类器', category:'文本循环网络', icon:'↔', accent:'#7657df', summary:'正向和反向循环网络共同编码句子，再把两端状态拼接后做情感分类。', note:'双向结构让每个位置同时看到左右上下文；最后的拼接是句子级表示的来源。', tags:['BiRNN','双向上下文','分类头'], code:['chapters/chapter_15_nlp_applications/sentiment_analysis_rnn.py'], nodes:[['Token Embedding','输入句子','input'],['Forward / Backward','双向编码','recurrent'],['Concat','首尾状态','concat'],['Linear','情感分类','output']]}
+    ];
+
+    const moduleList = document.getElementById('moduleList');
+    const moduleCount = document.getElementById('moduleCount');
+    const detailChapter = document.querySelector('#detailChapter b');
+    const detailChapterDot = document.querySelector('#detailChapter i');
+    const detailCategory = document.getElementById('detailCategory');
+    const detailTitle = document.getElementById('detailTitle');
+    const detailSummary = document.getElementById('detailSummary');
+    const detailNote = document.getElementById('detailNote');
+    const codeLinks = document.getElementById('codeLinks');
+    const moduleFooter = document.getElementById('moduleFooter');
+    const diagramCaption = document.getElementById('diagramCaption');
+    const diagram = document.getElementById('diagram');
+    const esc = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    const iconFor = kind => ({input:'▦', conv:'◈', pool:'⌄', dense:'●', activation:'⌁', recurrent:'↻', attention:'✦', concat:'⊕', output:'◆'}[kind] || '•');
+
+    function svgNode(x, y, w, h, node, index) {
+      const kind = node[2];
+      return `<g class="diagram-node" transform="translate(${x},${y})">
+        <rect width="${w}" height="${h}" rx="18"></rect>
+        <circle class="icon-disc" cx="28" cy="${h / 2}" r="17"></circle>
+        <text class="icon" x="28" y="${h / 2 + 6}">${iconFor(kind)}</text>
+        <text class="node-label" x="${w / 2 + 14}" y="${h / 2 - 2}">${esc(node[0])}</text>
+        <text class="node-sub" x="${w / 2 + 14}" y="${h / 2 + 18}">${esc(node[1])}</text>
+      </g>`;
+    }
+    function arrow(x1, y1, x2, y2, secondary=false) { return `<path class="diagram-arrow${secondary ? ' secondary' : ''}" d="M ${x1} ${y1} C ${(x1+x2)/2} ${y1}, ${(x1+x2)/2} ${y2}, ${x2} ${y2}"></path>`; }
+    function renderSequence(item) {
+      const nodes = item.nodes;
+      const w = Math.min(196, 740 / nodes.length);
+      const gap = (740 - nodes.length * w) / Math.max(1, nodes.length - 1);
+      const y = 142, h = 94, start = 60;
+      let markup = `<rect class="diagram-bg" x="18" y="22" width="824" height="320" rx="28"></rect><path class="diagram-lane" d="M 50 190 H 810"></path>`;
+      nodes.forEach((node, i) => {
+        const x = start + i * (w + gap);
+        markup += svgNode(x, y, w, h, node, i);
+        if (i < nodes.length - 1) markup += arrow(x + w + 8, y + h/2, start + (i+1)*(w+gap) - 8, y + h/2);
+      });
+      return markup;
+    }
+    function renderResidual(item) {
+      const main = item.nodes || [['输入','特征','input'],['Conv Block','主分支','conv'],['输出','更新表示','output']];
+      const w = 184, gap = 34, xs = [66, 338, 610], mainY = 78, shortY = 256, h = 82;
+      return `<rect class="diagram-bg" x="18" y="22" width="824" height="320" rx="28"></rect>
+        <path class="diagram-lane" d="M 48 119 H 812 M 48 297 H 812"></path>
+        ${svgNode(xs[0], mainY, w, h, main[0], 0)}${svgNode(xs[1], mainY, w, h, main[1], 1)}${svgNode(xs[2], mainY, w, h, main[2], 2)}
+        ${svgNode(xs[1], shortY, w, h, ['Identity','捷径分支','attention'], 3)}
+        ${arrow(xs[0]+w+8, mainY+h/2, xs[1]-8, mainY+h/2)}${arrow(xs[1]+w+8, mainY+h/2, xs[2]-8, mainY+h/2)}
+        <path class="diagram-arrow secondary" d="M ${xs[0]+w/2} ${mainY+h+2} C ${xs[0]+w/2} 245, ${xs[1]+w/2} 245, ${xs[1]+w/2} ${shortY-8}"></path>
+        <path class="diagram-arrow secondary" d="M ${xs[1]+w} ${shortY+h/2} C 650 ${shortY+h/2}, 704 205, ${xs[2]+w/2} ${mainY+h+4}"></path>
+        <circle class="icon-disc" cx="${xs[2]+w/2}" cy="${mainY+h/2}" r="20"></circle><text class="icon" x="${xs[2]+w/2}" y="${mainY+h/2+6}">＋</text>`;
+    }
+    function renderBranches(item) {
+      const x = 62, w = 170, h = 62, ys = [72, 164, 256], mergeX = 585;
+      return `<rect class="diagram-bg" x="18" y="22" width="824" height="320" rx="28"></rect>
+        ${svgNode(48, 164, 150, 74, ['输入','共享特征','input'], 0)}
+        ${svgNode(mergeX, 164, 188, 74, ['Concat','合并通道','concat'], 4)}
+        ${svgNode(736, 164, 78, 74, ['输出','类别','output'], 5)}
+        ${svgNode(x, ys[0], w, h, ['1×1 Conv','局部映射','conv'], 1)}
+        ${svgNode(x, ys[1], w, h, ['3×3 Conv','中等感受野','conv'], 2)}
+        ${svgNode(x, ys[2], w, h, ['5×5 / Pool','大尺度信息','pool'], 3)}
+        ${arrow(198,201, x-8, ys[0]+h/2)}${arrow(198,201, x-8, ys[1]+h/2)}${arrow(198,201, x-8, ys[2]+h/2)}
+        ${arrow(x+w+8, ys[0]+h/2, mergeX-8, 183)}${arrow(x+w+8, ys[1]+h/2, mergeX-8, 201)}${arrow(x+w+8, ys[2]+h/2, mergeX-8, 219)}
+        ${arrow(mergeX+188+8, 201, 728, 201)}`;
+    }
+    function renderMulti(item) {
+      const w = 180, h = 72;
+      return `<rect class="diagram-bg" x="18" y="22" width="824" height="320" rx="28"></rect>
+        ${svgNode(48, 160, w, h, ['Backbone','共享特征','input'], 0)}
+        ${svgNode(306, 76, w, h, ['多尺度特征','P3 / P4 / P5','conv'], 1)}
+        ${svgNode(306, 236, w, h, ['多尺度特征','不同分辨率','conv'], 2)}
+        ${svgNode(574, 76, w, h, ['Class Head','类别概率','dense'], 3)}
+        ${svgNode(574, 236, w, h, ['Box Head','边界框','dense'], 4)}
+        ${svgNode(738, 160, 88, h, ['NMS','去重','output'], 5)}
+        ${arrow(228,196,298,112)}${arrow(228,196,298,272)}${arrow(486,112,566,112)}${arrow(486,272,566,272)}${arrow(754,112,730,196)}${arrow(754,272,730,196)}`;
+    }
+    function renderDiagram(item) {
+      diagram.style.setProperty('--accent', item.accent);
+      diagram.innerHTML = `<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="${item.accent}"></path></marker></defs>` + (item.mode === 'residual' ? renderResidual(item) : item.mode === 'branches' ? renderBranches(item) : item.mode === 'multi' ? renderMulti(item) : renderSequence(item));
+    }
+    function renderModules(activeId) {
+      moduleList.innerHTML = modules.map(m => `<button class="module-button${m.id === activeId ? ' is-active' : ''}" style="--accent:${m.accent}" data-id="${m.id}"><span class="module-icon">${m.icon}</span><span class="module-copy"><strong>${esc(m.title)}</strong><small>第 ${m.chapter} 章 · ${esc(m.category)}</small></span><span class="module-chapter">${m.chapter}</span></button>`).join('');
+      moduleList.querySelectorAll('.module-button').forEach(button => button.addEventListener('click', () => selectModule(button.dataset.id)));
+    }
+    function selectModule(id) {
+      const item = modules.find(m => m.id === id) || modules[0];
+      document.documentElement.style.setProperty('--accent', item.accent);
+      detailChapterDot.style.background = item.accent;
+      detailChapter.textContent = `第 ${item.chapter} 章 · ${item.chapterName}`;
+      detailCategory.textContent = item.category;
+      detailTitle.textContent = item.title;
+      detailSummary.textContent = item.summary;
+      detailNote.textContent = item.note;
+      diagramCaption.textContent = `第 ${item.chapter} 章 · ${item.category}`;
+      codeLinks.innerHTML = item.code.map(path => `<a class="code-link" href="#" title="源码位于配套代码包：${esc(path)}">${esc(path)}</a>`).join('');
+      moduleFooter.innerHTML = item.tags.map(tag => `<span>${esc(tag)}</span>`).join('');
+      renderDiagram(item);
+      renderModules(item.id);
+    }
+    moduleCount.textContent = `${modules.length} 个模块`;
+    selectModule('resnet');
+  </script>
+</body>
+</html>

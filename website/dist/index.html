@@ -58,7 +58,7 @@
     .source-chip { white-space: nowrap; }
     .container { width: min(1480px, calc(100% - 36px)); margin: 0 auto; }
     .hero {
-      display: grid; grid-template-columns: minmax(0, 1.06fr) minmax(330px, .94fr); gap: 34px;
+      display: grid; grid-template-columns: minmax(300px, .78fr) minmax(520px, 1.22fr); gap: 34px;
       align-items: center; padding: 42px 0 32px;
     }
     .kicker { margin: 0 0 10px; color: var(--blue); font-size: 14px; font-weight: 700; letter-spacing: .14em; }
@@ -71,14 +71,11 @@
     }
     .stat strong { color: var(--ink); font-size: 20px; }
     .hero-map {
-      min-height: 260px; padding: 16px; border: 1px solid var(--line); border-radius: 26px;
+      position: relative; min-height: 260px; padding: 14px; overflow: hidden; border: 1px solid var(--line); border-radius: 26px;
       background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(236,243,250,.84)); box-shadow: var(--shadow);
     }
-    .hero-map svg { display: block; width: 100%; height: 260px; }
-    .hero-map .orbit { fill: none; stroke: #c9d8ea; stroke-width: 1.4; stroke-dasharray: 5 8; }
-    .hero-map .thread { stroke: #7890ad; stroke-width: 1.2; opacity: .62; }
-    .hero-map .dot { stroke: #fff; stroke-width: 3; }
-    .hero-map text { font-family: "WenKai", serif; fill: #41566f; font-size: 13px; }
+    .hero-map img { display: block; width: 100%; height: 268px; object-fit: contain; border-radius: 17px; background: #f7fbff; }
+    .hero-map::after { content: "卷积 · 注意力 · 循环 · 编码器"; position: absolute; right: 24px; bottom: 21px; padding: 5px 10px; color: #41566f; background: rgba(255,255,255,.9); border: 1px solid #d7e4f1; border-radius: 999px; font-size: 12px; letter-spacing: .05em; }
     .workspace { display: grid; grid-template-columns: 310px minmax(0, 1fr); gap: 22px; padding: 18px 0 72px; }
     .module-rail, .detail-stage { border: 1px solid var(--line); border-radius: 24px; background: rgba(255,255,255,.78); box-shadow: var(--shadow); }
     .module-rail { align-self: start; position: sticky; top: 78px; max-height: calc(100vh - 100px); overflow: auto; padding: 18px; }
@@ -101,7 +98,7 @@
     .detail-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-bottom: 18px; color: var(--muted); font-size: 14px; }
     .chapter-badge { display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border: 1px solid #cddbeb; border-radius: 999px; background: #f7faff; }
     .chapter-badge i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
-    .detail-grid { display: grid; grid-template-columns: minmax(260px, .68fr) minmax(500px, 1.32fr); gap: 26px; align-items: start; }
+    .detail-grid { display: grid; grid-template-columns: minmax(250px, .56fr) minmax(0, 1.44fr); gap: 26px; align-items: start; }
     .detail-intro h2 { margin: 0; font-size: clamp(30px, 4vw, 52px); line-height: 1.08; letter-spacing: -.04em; }
     .detail-intro .summary { margin: 18px 0 0; color: #4d6278; font-size: 17px; }
     .note-card { margin-top: 22px; padding: 16px; border-left: 4px solid var(--accent); border-radius: 15px; background: #f1f6fd; }
@@ -111,18 +108,22 @@
     .code-entry h3 { margin: 0 0 9px; font-size: 14px; color: var(--muted); }
     .code-link { display: block; margin-top: 7px; padding: 9px 11px; overflow-wrap: anywhere; color: #34577f; border: 1px solid var(--line); border-radius: 10px; background: #fbfdff; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; text-decoration: none; }
     .code-link:hover { border-color: #aac6ee; color: var(--blue); }
-    .diagram-card { min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: 22px; background: linear-gradient(145deg, #fbfdff, #edf4fb); }
+    .diagram-card { min-width: 0; padding: 16px; overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: linear-gradient(145deg, #fbfdff, #edf4fb); }
     .diagram-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
     .diagram-head h3 { margin: 0; font-size: 15px; }
     .diagram-head span { color: var(--muted); font-size: 13px; }
-    #diagram { display: block; width: 100%; min-height: 330px; height: auto; overflow: visible; }
+    .diagram-viewport { width: 100%; overflow-x: auto; overflow-y: hidden; padding: 3px 0 12px; scrollbar-color: #b9cbe0 transparent; scrollbar-width: thin; }
+    #diagram { display: block; height: auto; max-width: none; overflow: visible; }
     .diagram-bg { fill: #f8fbff; stroke: #d6e3f0; stroke-width: 1.2; }
     .diagram-lane { fill: none; stroke: #d2dfec; stroke-width: 1.5; stroke-dasharray: 5 8; }
-    .diagram-node rect { fill: #fff; stroke: var(--accent); stroke-width: 2; }
-    .diagram-node .icon-disc { fill: var(--accent); }
-    .diagram-node .icon { fill: #fff; font: 700 18px Georgia, serif; text-anchor: middle; }
-    .diagram-node .node-label { fill: #152b44; font: 700 14px "WenKai", serif; text-anchor: middle; }
-    .diagram-node .node-sub { fill: #6b7f94; font: 12px "WenKai", serif; text-anchor: middle; }
+    .diagram-node .node-card { fill: #fff; stroke: color-mix(in srgb, var(--accent) 72%, #ffffff); stroke-width: 2; filter: url(#nodeShadow); }
+    .diagram-node .visual-pad { fill: color-mix(in srgb, var(--accent) 10%, #ffffff); }
+    .diagram-node .visual-stroke { fill: none; stroke: var(--accent); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .diagram-node .visual-fill { fill: color-mix(in srgb, var(--accent) 18%, #ffffff); stroke: var(--accent); stroke-width: 1.8; }
+    .diagram-node .visual-solid { fill: var(--accent); }
+    .diagram-node .visual-dot { fill: #fff; stroke: var(--accent); stroke-width: 1.8; }
+    .diagram-node .node-label { fill: #152b44; font: 700 15px "WenKai", "Kaiti SC", serif; text-anchor: middle; }
+    .diagram-node .node-sub { fill: #667b91; font: 12.5px "WenKai", "Kaiti SC", serif; text-anchor: middle; }
     .diagram-arrow { fill: none; stroke: var(--accent); stroke-width: 2.2; marker-end: url(#arrow); }
     .diagram-arrow.secondary { stroke: #94a8bd; stroke-dasharray: 5 6; }
     .legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 13px; padding-top: 11px; border-top: 1px solid #dbe4ee; color: var(--muted); font-size: 12px; }
@@ -131,9 +132,17 @@
     .module-footer { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
     .module-footer span { padding: 5px 9px; border-radius: 999px; background: #f0f4f9; }
     .empty { padding: 28px; text-align: center; color: var(--muted); }
+    @media (max-width: 1240px) {
+      .detail-grid { grid-template-columns: 1fr; }
+      .detail-intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, .8fr); gap: 12px 24px; align-items: start; }
+      .detail-intro h2, .detail-intro .summary { grid-column: 1; }
+      .note-card, .code-entry { grid-column: 2; }
+      .note-card { grid-row: 1 / span 2; margin-top: 0; }
+      .code-entry { margin-top: 0; }
+    }
     @media (max-width: 1000px) {
       .hero { grid-template-columns: 1fr; }
-      .hero-map { max-width: 720px; }
+      .hero-map { max-width: 920px; }
       .workspace { grid-template-columns: 1fr; }
       .module-rail { position: static; max-height: none; }
       .module-list { display: flex; overflow-x: auto; padding-bottom: 4px; }
@@ -144,9 +153,15 @@
       .source-chip { white-space: normal; }
       .container { width: min(100% - 24px, 1480px); }
       .hero { padding-top: 30px; }
+      .hero-map { padding: 8px; }
+      .hero-map img { height: 210px; }
+      .hero-map::after { right: 14px; bottom: 13px; }
       .hero-copy > p:not(.kicker) { font-size: 16px; }
       .detail-grid { grid-template-columns: 1fr; }
-      #diagram { min-height: 290px; }
+      .detail-intro { display: block; }
+      .note-card, .code-entry { margin-top: 18px; }
+      .diagram-card { padding: 12px; }
+      .diagram-head { align-items: flex-start; flex-direction: column; gap: 2px; }
       .module-button { min-width: 200px; }
     }
   </style>
@@ -171,20 +186,7 @@
           </div>
         </div>
         <div class="hero-map" aria-label="网络模块关系图">
-          <svg viewBox="0 0 520 260" role="img" aria-label="卷积、循环、注意力和预训练网络的关系">
-            <ellipse class="orbit" cx="260" cy="132" rx="196" ry="94" />
-            <ellipse class="orbit" cx="260" cy="132" rx="126" ry="60" />
-            <path class="thread" d="M78 150 C150 77 190 197 270 117 S380 64 445 132" />
-            <path class="thread" d="M86 92 C180 214 229 55 318 148 S409 206 456 88" />
-            <circle class="dot" cx="118" cy="102" r="13" fill="#2f6fed" />
-            <circle class="dot" cx="226" cy="70" r="13" fill="#0e9f8b" />
-            <circle class="dot" cx="357" cy="92" r="13" fill="#e99520" />
-            <circle class="dot" cx="408" cy="170" r="13" fill="#7657df" />
-            <circle class="dot" cx="278" cy="194" r="13" fill="#159947" />
-            <circle class="dot" cx="130" cy="177" r="13" fill="#112235" />
-            <text x="86" y="72">CNN</text><text x="208" y="43">RNN</text><text x="340" y="66">Attention</text>
-            <text x="389" y="205">BERT</text><text x="260" y="230">Vision</text><text x="83" y="207">MLP</text>
-          </svg>
+          <img src="./neural-atlas-illustration.png" width="2172" height="724" alt="由卷积特征图、张量积木、注意力连接、循环结构和编码器塔组成的神经网络图谱插图" />
         </div>
       </section>
 
@@ -207,7 +209,9 @@
             </article>
             <article class="diagram-card">
               <div class="diagram-head"><h3>结构图 · 从输入走到输出</h3><span id="diagramCaption"></span></div>
-              <svg id="diagram" viewBox="0 0 860 390" role="img" aria-label="当前网络结构图"></svg>
+              <div class="diagram-viewport" tabindex="0" aria-label="可横向滚动查看完整网络结构图">
+                <svg id="diagram" viewBox="0 0 860 390" role="img" aria-label="当前网络结构图"></svg>
+              </div>
               <div class="legend" aria-label="图例">
                 <span><b style="--c:#2f6fed"></b>输入/输出</span>
                 <span><b style="--c:#0e9f8b"></b>卷积/特征</span>
@@ -260,71 +264,91 @@
     const diagramCaption = document.getElementById('diagramCaption');
     const diagram = document.getElementById('diagram');
     const esc = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-    const iconFor = kind => ({input:'▦', conv:'◈', pool:'⌄', dense:'●', activation:'⌁', recurrent:'↻', attention:'✦', concat:'⊕', output:'◆'}[kind] || '•');
+    function visualFor(kind, w) {
+      const cx = w / 2;
+      if (kind === 'input') return `<rect class="visual-fill" x="${cx-28}" y="17" width="48" height="48" rx="8"></rect><path class="visual-stroke" d="M ${cx-20} 54 l12-13 9 8 11-17 10 22"></path><circle class="visual-solid" cx="${cx+9}" cy="29" r="4"></circle>`;
+      if (kind === 'conv') return `<rect class="visual-fill" x="${cx-32}" y="25" width="48" height="42" rx="7"></rect><rect class="visual-fill" x="${cx-23}" y="18" width="48" height="42" rx="7"></rect><rect class="visual-fill" x="${cx-14}" y="11" width="48" height="42" rx="7"></rect><path class="visual-stroke" d="M ${cx-5} 20 v24 M ${cx+7} 20 v24 M ${cx+19} 20 v24 M ${cx-5} 28 h36 M ${cx-5} 36 h36"></path>`;
+      if (kind === 'pool') return `<path class="visual-fill" d="M ${cx-31} 15 H ${cx+31} L ${cx+15} 50 H ${cx-15} Z"></path><rect class="visual-solid" x="${cx-17}" y="55" width="34" height="11" rx="5"></rect><path class="visual-stroke" d="M ${cx-20} 26 h40 M ${cx-14} 37 h28"></path>`;
+      if (kind === 'dense') return `<path class="visual-stroke" d="M ${cx-25} 18 L ${cx+23} 23 M ${cx-25} 18 L ${cx+23} 47 M ${cx-25} 42 L ${cx+23} 23 M ${cx-25} 42 L ${cx+23} 47 M ${cx-25} 62 L ${cx+23} 47"></path><circle class="visual-dot" cx="${cx-25}" cy="18" r="6"></circle><circle class="visual-dot" cx="${cx-25}" cy="42" r="6"></circle><circle class="visual-dot" cx="${cx-25}" cy="62" r="6"></circle><circle class="visual-solid" cx="${cx+23}" cy="23" r="7"></circle><circle class="visual-solid" cx="${cx+23}" cy="47" r="7"></circle>`;
+      if (kind === 'activation') return `<path class="visual-stroke" d="M ${cx-31} 60 H ${cx+32} M ${cx-22} 68 V 10 M ${cx-18} 57 H ${cx-2} L ${cx+18} 25 H ${cx+31}"></path><circle class="visual-solid" cx="${cx+18}" cy="25" r="5"></circle>`;
+      if (kind === 'recurrent') return `<rect class="visual-fill" x="${cx-22}" y="25" width="44" height="34" rx="10"></rect><path class="visual-stroke" d="M ${cx+20} 35 C ${cx+44} 22, ${cx+43} 65, ${cx+19} 53 M ${cx+37} 49 l-3 10-9-3"></path><path class="visual-stroke" d="M ${cx-34} 42 H ${cx-24} M ${cx+24} 42 H ${cx+34}"></path>`;
+      if (kind === 'attention') return `<circle class="visual-dot" cx="${cx-28}" cy="22" r="6"></circle><circle class="visual-dot" cx="${cx-28}" cy="43" r="6"></circle><circle class="visual-dot" cx="${cx-28}" cy="64" r="6"></circle><circle class="visual-solid" cx="${cx+28}" cy="43" r="9"></circle><path class="visual-stroke" d="M ${cx-21} 22 L ${cx+19} 41 M ${cx-21} 43 H ${cx+19} M ${cx-21} 64 L ${cx+19} 45"></path>`;
+      if (kind === 'concat') return `<rect class="visual-fill" x="${cx-31}" y="14" width="19" height="52" rx="6"></rect><rect class="visual-fill" x="${cx-7}" y="14" width="19" height="52" rx="6"></rect><rect class="visual-solid" x="${cx+17}" y="14" width="19" height="52" rx="6"></rect><path class="visual-stroke" d="M ${cx-38} 71 H ${cx+39}"></path>`;
+      return `<rect class="visual-fill" x="${cx-31}" y="15" width="62" height="48" rx="10"></rect><circle class="visual-solid" cx="${cx-12}" cy="39" r="8"></circle><rect class="visual-solid" x="${cx+2}" y="29" width="20" height="7" rx="3"></rect><rect class="visual-solid" x="${cx+2}" y="43" width="14" height="7" rx="3"></rect>`;
+    }
 
-    function svgNode(x, y, w, h, node, index) {
-      const kind = node[2];
+    function svgNode(x, y, w, h, node) {
       return `<g class="diagram-node" transform="translate(${x},${y})">
-        <rect width="${w}" height="${h}" rx="18"></rect>
-        <circle class="icon-disc" cx="28" cy="${h / 2}" r="17"></circle>
-        <text class="icon" x="28" y="${h / 2 + 6}">${iconFor(kind)}</text>
-        <text class="node-label" x="${w / 2 + 14}" y="${h / 2 - 2}">${esc(node[0])}</text>
-        <text class="node-sub" x="${w / 2 + 14}" y="${h / 2 + 18}">${esc(node[1])}</text>
+        <rect class="node-card" width="${w}" height="${h}" rx="22"></rect>
+        <rect class="visual-pad" x="12" y="10" width="${w-24}" height="66" rx="15"></rect>
+        ${visualFor(node[2], w)}
+        <text class="node-label" x="${w/2}" y="99">${esc(node[0])}</text>
+        <text class="node-sub" x="${w/2}" y="120">${esc(node[1])}</text>
       </g>`;
     }
     function arrow(x1, y1, x2, y2, secondary=false) { return `<path class="diagram-arrow${secondary ? ' secondary' : ''}" d="M ${x1} ${y1} C ${(x1+x2)/2} ${y1}, ${(x1+x2)/2} ${y2}, ${x2} ${y2}"></path>`; }
+    function base(width, height, lanes='') { return `<rect class="diagram-bg" x="18" y="18" width="${width-36}" height="${height-36}" rx="30"></rect>${lanes}`; }
+
     function renderSequence(item) {
-      const nodes = item.nodes;
-      const w = Math.min(196, 740 / nodes.length);
-      const gap = (740 - nodes.length * w) / Math.max(1, nodes.length - 1);
-      const y = 142, h = 94, start = 60;
-      let markup = `<rect class="diagram-bg" x="18" y="22" width="824" height="320" rx="28"></rect><path class="diagram-lane" d="M 50 190 H 810"></path>`;
+      const nodes = item.nodes || [['输入','张量','input'],['网络模块','特征变换','dense'],['输出','结果','output']];
+      const w = 146, h = 136, gap = 38, start = 48, y = 132;
+      const width = Math.max(860, start * 2 + nodes.length * w + (nodes.length - 1) * gap);
+      const height = 400;
+      let markup = base(width, height, `<path class="diagram-lane" d="M 44 ${y+h/2} H ${width-44}"></path>`);
       nodes.forEach((node, i) => {
         const x = start + i * (w + gap);
-        markup += svgNode(x, y, w, h, node, i);
-        if (i < nodes.length - 1) markup += arrow(x + w + 8, y + h/2, start + (i+1)*(w+gap) - 8, y + h/2);
+        markup += svgNode(x, y, w, h, node);
+        if (i < nodes.length - 1) markup += arrow(x+w+7, y+h/2, start+(i+1)*(w+gap)-7, y+h/2);
       });
-      return markup;
+      return {markup, width, height};
     }
-    function renderResidual(item) {
-      const main = item.nodes || [['输入','特征','input'],['Conv Block','主分支','conv'],['输出','更新表示','output']];
-      const w = 184, gap = 34, xs = [66, 338, 610], mainY = 78, shortY = 256, h = 82;
-      return `<rect class="diagram-bg" x="18" y="22" width="824" height="320" rx="28"></rect>
-        <path class="diagram-lane" d="M 48 119 H 812 M 48 297 H 812"></path>
-        ${svgNode(xs[0], mainY, w, h, main[0], 0)}${svgNode(xs[1], mainY, w, h, main[1], 1)}${svgNode(xs[2], mainY, w, h, main[2], 2)}
-        ${svgNode(xs[1], shortY, w, h, ['Identity','捷径分支','attention'], 3)}
-        ${arrow(xs[0]+w+8, mainY+h/2, xs[1]-8, mainY+h/2)}${arrow(xs[1]+w+8, mainY+h/2, xs[2]-8, mainY+h/2)}
-        <path class="diagram-arrow secondary" d="M ${xs[0]+w/2} ${mainY+h+2} C ${xs[0]+w/2} 245, ${xs[1]+w/2} 245, ${xs[1]+w/2} ${shortY-8}"></path>
-        <path class="diagram-arrow secondary" d="M ${xs[1]+w} ${shortY+h/2} C 650 ${shortY+h/2}, 704 205, ${xs[2]+w/2} ${mainY+h+4}"></path>
-        <circle class="icon-disc" cx="${xs[2]+w/2}" cy="${mainY+h/2}" r="20"></circle><text class="icon" x="${xs[2]+w/2}" y="${mainY+h/2+6}">＋</text>`;
+    function renderResidual() {
+      const width = 1040, height = 450, w = 158, h = 136, y = 224;
+      const xs = [48, 288, 548, 818];
+      let markup = base(width, height, `<path class="diagram-lane" d="M 44 ${y+h/2} H ${width-44} M 126 116 H 704"></path>`);
+      markup += arrow(xs[0]+w+8,y+h/2,xs[1]-8,y+h/2)+arrow(xs[1]+w+8,y+h/2,xs[2]-8,y+h/2)+arrow(xs[2]+w+8,y+h/2,xs[3]-8,y+h/2);
+      markup += `<path class="diagram-arrow secondary" d="M ${xs[0]+w/2} ${y-8} C ${xs[0]+w/2} 102, ${xs[2]+w/2} 102, ${xs[2]+w/2} ${y-8}"></path>`;
+      markup += svgNode(xs[0],y,w,h,['输入','特征图','input'])+svgNode(xs[1],y,w,h,['Conv Block','主分支','conv'])+svgNode(xs[2],y,w,h,['相加节点','残差融合','concat'])+svgNode(xs[3],y,w,h,['输出','更新表示','output']);
+      markup += svgNode(330,48,w,h,['Identity','捷径分支','attention']);
+      return {markup,width,height};
     }
-    function renderBranches(item) {
-      const x = 62, w = 170, h = 62, ys = [72, 164, 256], mergeX = 585;
-      return `<rect class="diagram-bg" x="18" y="22" width="824" height="320" rx="28"></rect>
-        ${svgNode(48, 164, 150, 74, ['输入','共享特征','input'], 0)}
-        ${svgNode(mergeX, 164, 188, 74, ['Concat','合并通道','concat'], 4)}
-        ${svgNode(736, 164, 78, 74, ['输出','类别','output'], 5)}
-        ${svgNode(x, ys[0], w, h, ['1×1 Conv','局部映射','conv'], 1)}
-        ${svgNode(x, ys[1], w, h, ['3×3 Conv','中等感受野','conv'], 2)}
-        ${svgNode(x, ys[2], w, h, ['5×5 / Pool','大尺度信息','pool'], 3)}
-        ${arrow(198,201, x-8, ys[0]+h/2)}${arrow(198,201, x-8, ys[1]+h/2)}${arrow(198,201, x-8, ys[2]+h/2)}
-        ${arrow(x+w+8, ys[0]+h/2, mergeX-8, 183)}${arrow(x+w+8, ys[1]+h/2, mergeX-8, 201)}${arrow(x+w+8, ys[2]+h/2, mergeX-8, 219)}
-        ${arrow(mergeX+188+8, 201, 728, 201)}`;
+    function renderBranches() {
+      const width = 1120, height = 540, w = 170, h = 136, inputX = 48, branchX = 300, mergeX = 650, outputX = 900, centerY = 202;
+      const ys = [42,202,362];
+      let markup = base(width,height,`<path class="diagram-lane" d="M 44 ${centerY+h/2} H ${width-44}"></path>`);
+      ys.forEach((y,i)=>{ markup += arrow(inputX+w+8,centerY+h/2,branchX-8,y+h/2)+arrow(branchX+w+8,y+h/2,mergeX-8,centerY+h/2); });
+      markup += arrow(mergeX+w+8,centerY+h/2,outputX-8,centerY+h/2);
+      markup += svgNode(inputX,centerY,w,h,['输入','共享特征','input'])+svgNode(branchX,ys[0],w,h,['1×1 Conv','局部映射','conv'])+svgNode(branchX,ys[1],w,h,['3×3 Conv','中等感受野','conv'])+svgNode(branchX,ys[2],w,h,['5×5 / Pool','大尺度信息','pool'])+svgNode(mergeX,centerY,w,h,['Concat','合并通道','concat'])+svgNode(outputX,centerY,w,h,['输出','汇总特征','output']);
+      return {markup,width,height};
     }
-    function renderMulti(item) {
-      const w = 180, h = 72;
-      return `<rect class="diagram-bg" x="18" y="22" width="824" height="320" rx="28"></rect>
-        ${svgNode(48, 160, w, h, ['Backbone','共享特征','input'], 0)}
-        ${svgNode(306, 76, w, h, ['多尺度特征','P3 / P4 / P5','conv'], 1)}
-        ${svgNode(306, 236, w, h, ['多尺度特征','不同分辨率','conv'], 2)}
-        ${svgNode(574, 76, w, h, ['Class Head','类别概率','dense'], 3)}
-        ${svgNode(574, 236, w, h, ['Box Head','边界框','dense'], 4)}
-        ${svgNode(738, 160, 88, h, ['NMS','去重','output'], 5)}
-        ${arrow(228,196,298,112)}${arrow(228,196,298,272)}${arrow(486,112,566,112)}${arrow(486,272,566,272)}${arrow(754,112,730,196)}${arrow(754,272,730,196)}`;
+    function renderMulti() {
+      const width = 1110, height = 500, w = 170, h = 136, inputX = 48, featureX = 300, headX = 570, outputX = 870, centerY = 182;
+      const ys = [74,290];
+      let markup = base(width,height,`<path class="diagram-lane" d="M 44 ${centerY+h/2} H ${width-44}"></path>`);
+      ys.forEach(y=>{ markup += arrow(inputX+w+8,centerY+h/2,featureX-8,y+h/2)+arrow(featureX+w+8,y+h/2,headX-8,y+h/2)+arrow(headX+w+8,y+h/2,outputX-8,centerY+h/2); });
+      markup += svgNode(inputX,centerY,w,h,['Backbone','共享特征','input'])+svgNode(featureX,ys[0],w,h,['高分辨率特征','小目标','conv'])+svgNode(featureX,ys[1],w,h,['低分辨率特征','大目标','conv'])+svgNode(headX,ys[0],w,h,['Class Head','类别概率','dense'])+svgNode(headX,ys[1],w,h,['Box Head','边界框','dense'])+svgNode(outputX,centerY,w,h,['NMS','筛选候选','output']);
+      return {markup,width,height};
+    }
+    function renderTransformer(item) {
+      if (item.id !== 'bert') {
+        return renderSequence({...item,nodes:[['Token','输入序列','input'],['位置编码','加入顺序','activation'],['多头注意力','连接上下文','attention'],['Encoder × N','提取表示','recurrent'],['Decoder × N','逐步生成','recurrent'],['Softmax','输出词元','output']]});
+      }
+      const width = 1080, height = 500, w = 170, h = 136, inputX = 48, embedX = 280, encoderX = 520, headX = 780, ys = [72,292], centerY = 182;
+      let markup = base(width,height,`<path class="diagram-lane" d="M 44 ${centerY+h/2} H ${width-44}"></path>`);
+      markup += arrow(inputX+w+8,centerY+h/2,embedX-8,centerY+h/2)+arrow(embedX+w+8,centerY+h/2,encoderX-8,centerY+h/2)+arrow(encoderX+w+8,centerY+h/2,headX-8,ys[0]+h/2)+arrow(encoderX+w+8,centerY+h/2,headX-8,ys[1]+h/2);
+      markup += svgNode(inputX,centerY,w,h,['Token / Segment','输入索引','input'])+svgNode(embedX,centerY,w,h,['三种嵌入','加上位置','dense'])+svgNode(encoderX,centerY,w,h,['Encoder × N','双向表示','attention'])+svgNode(headX,ys[0],w,h,['MLM Head','预测遮盖词','dense'])+svgNode(headX,ys[1],w,h,['NSP Head','句间关系','output']);
+      return {markup,width,height};
     }
     function renderDiagram(item) {
       diagram.style.setProperty('--accent', item.accent);
-      diagram.innerHTML = `<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="${item.accent}"></path></marker></defs>` + (item.mode === 'residual' ? renderResidual(item) : item.mode === 'branches' ? renderBranches(item) : item.mode === 'multi' ? renderMulti(item) : renderSequence(item));
+      const result = item.mode === 'residual' ? renderResidual() : item.mode === 'branches' ? renderBranches() : item.mode === 'multi' ? renderMulti() : item.mode === 'transformer' ? renderTransformer(item) : renderSequence(item);
+      diagram.setAttribute('viewBox', `0 0 ${result.width} ${result.height}`);
+      diagram.setAttribute('width', result.width);
+      diagram.setAttribute('height', result.height);
+      diagram.style.width = `${result.width}px`;
+      diagram.innerHTML = `<defs><filter id="nodeShadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#183651" flood-opacity=".10"></feDropShadow></filter><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="${item.accent}"></path></marker></defs>${result.markup}`;
+      const viewport = diagram.closest('.diagram-viewport');
+      if (viewport) viewport.scrollLeft = 0;
     }
     function renderModules(activeId) {
       moduleList.innerHTML = modules.map(m => `<button class="module-button${m.id === activeId ? ' is-active' : ''}" style="--accent:${m.accent}" data-id="${m.id}"><span class="module-icon">${m.icon}</span><span class="module-copy"><strong>${esc(m.title)}</strong><small>第 ${m.chapter} 章 · ${esc(m.category)}</small></span><span class="module-chapter">${m.chapter}</span></button>`).join('');
